@@ -1,0 +1,1433 @@
+<!doctype html>
+<html lang="vi" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hoàng Phúc Portfolio</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <style>
+html{scroll-behavior:smooth;height:100%}
+body{height:100%;margin:0;font-family:'Times New Roman',Georgia,serif;overflow-x:hidden}
+*{box-sizing:border-box}
+
+:root{
+--bg:#0a1410;--surface:rgba(34,197,94,0.12);--text:#f0fdf4;
+--primary:#22c55e;--secondary:#10b981;
+}
+
+.app-wrapper{height:100%;overflow-y:auto;overflow-x:hidden;background:var(--bg);color:var(--text);position:relative;z-index:10}
+
+/* Glassmorphism */
+.glass{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:20px}
+
+/* Glow avatar */
+.avatar-glow{
+  width:160px;height:160px;border-radius:50%;
+  background:linear-gradient(135deg,#22c55e,#10b981,#06b6d4);
+  padding:4px;position:relative;
+  animation:glow-pulse 3s ease-in-out infinite;
+}
+.avatar-glow::after{
+  content:'';position:absolute;inset:-8px;border-radius:50%;
+  background:linear-gradient(135deg,#22c55e,#10b981,#06b6d4);
+  filter:blur(20px);opacity:0.5;z-index:-1;
+}
+@keyframes glow-pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
+
+.avatar-inner{width:100%;height:100%;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:3.5rem;font-weight:800;color:#a855f7}
+
+/* Blob shapes */
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.3;pointer-events:none}
+.blob-1{width:400px;height:400px;background:#22c55e;top:-100px;left:-100px}
+.blob-2{width:300px;height:300px;background:#10b981;bottom:-50px;right:-50px}
+.blob-3{width:250px;height:250px;background:#06b6d4;top:50%;left:60%}
+
+/* Skill bar */
+.skill-bar{height:8px;border-radius:99px;background:rgba(255,255,255,0.08);overflow:hidden}
+.skill-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#22c55e,#10b981);transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+
+/* Timeline */
+.timeline-line{position:absolute;left:20px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,#22c55e,#10b981,transparent)}
+.timeline-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#10b981);border:2px solid var(--bg);position:absolute;left:15px;top:6px;z-index:2}
+
+/* Card hover */
+.project-card{transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease;text-decoration:none;display:block;color:inherit}
+.project-card:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(168,85,247,0.15)}
+.project-card .card-overlay{opacity:0;transition:opacity .3s ease}
+.project-card:hover .card-overlay{opacity:1}
+
+/* CTA buttons */
+.btn-primary{
+  background:linear-gradient(135deg,#22c55e,#10b981);
+  padding:12px 28px;border-radius:99px;font-weight:600;color:#fff;
+  transition:all .3s ease;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(34,197,94,0.4)}
+.btn-outline{
+  padding:12px 28px;border-radius:99px;font-weight:600;color:#d1fae5;
+  border:1.5px solid rgba(255,255,255,0.2);background:transparent;
+  transition:all .3s ease;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-outline:hover{border-color:#22c55e;background:rgba(34,197,94,0.1);transform:translateY(-2px)}
+
+/* Section reveal */
+.reveal-section{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
+.reveal-section.visible{opacity:1;transform:translateY(0)}
+
+/* Filter buttons */
+.filter-btn{padding:8px 20px;border-radius:99px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--text);cursor:pointer;transition:all .3s ease;font-family:'Outfit',sans-serif;font-size:14px}
+.filter-btn.active,.filter-btn:hover{background:linear-gradient(135deg,#22c55e,#10b981);border-color:transparent;color:#fff}
+
+/* Input style */
+.form-input{
+  width:100%;padding:14px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.04);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;
+  transition:border-color .3s ease,box-shadow .3s ease;outline:none;
+}
+.form-input:focus{border-color:#22c55e;box-shadow:0 0 20px rgba(34,197,94,0.15)}
+.form-input::placeholder{color:rgba(255,255,255,0.3)}
+
+/* Nav */
+.nav-link{position:relative;color:rgba(255,255,255,0.6);transition:color .3s ease}
+.nav-link:hover{color:#fff}
+.nav-link::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:linear-gradient(90deg,#22c55e,#10b981);transition:width .3s ease}
+.nav-link:hover::after{width:100%}
+
+/* Scrollbar */
+.app-wrapper::-webkit-scrollbar{width:6px}
+.app-wrapper::-webkit-scrollbar-track{background:transparent}
+.app-wrapper::-webkit-scrollbar-thumb{background:rgba(168,85,247,0.3);border-radius:99px}
+
+/* Stat card */
+.stat-card{text-align:center;padding:24px 16px}
+.stat-number{font-size:2rem;font-weight:800;background:linear-gradient(135deg,#ff6b6b,#ffa500);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Circular progress */
+.circular-progress{position:relative;width:80px;height:80px}
+.circular-progress svg{transform:rotate(-90deg)}
+.circular-progress .progress-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+
+/* Enhanced animations */
+@keyframes float-in {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-right {
+  0% { opacity: 0; transform: translateX(-40px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes glow-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(-10px); }
+  50% { transform: translateY(10px); }
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: rgba(168,85,247,0.3); box-shadow: 0 0 20px rgba(168,85,247,0.1); }
+  50% { border-color: rgba(168,85,247,0.8); box-shadow: 0 0 40px rgba(168,85,247,0.3); }
+}
+
+.float-animation { animation: float 3s ease-in-out infinite; }
+.pulse-border-animation { animation: pulse-border 2.5s ease-in-out infinite; }
+
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes hero-name-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes hero-name-pulse {
+  0%, 100% { filter: drop-shadow(0 0 30px rgba(168,85,247,0.4)) drop-shadow(0 0 60px rgba(236,72,153,0.2)); }
+  50% { filter: drop-shadow(0 0 50px rgba(168,85,247,0.7)) drop-shadow(0 0 100px rgba(236,72,153,0.5)); }
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(135deg,#22c55e,#10b981,#06b6d4,#22c55e);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glow-rotate 4s ease infinite;
+}
+
+/* Neon border effect */
+.neon-card {
+  border: 2px solid rgba(34,197,94,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.neon-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,transparent,rgba(34,197,94,0.2),transparent);
+  animation: slide 3s infinite;
+}
+
+@keyframes slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Hover effects */
+.card-shine:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: shine 0.5s;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Animated background grid */
+.bg-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(0deg, transparent 24%, rgba(34,197,94,.1) 25%, rgba(34,197,94,.1) 26%, transparent 27%, transparent 74%, rgba(34,197,94,.1) 75%, rgba(34,197,94,.1) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(34,197,94,.1) 25%, rgba(34,197,94,.1) 26%, transparent 27%, transparent 74%, rgba(34,197,94,.1) 75%, rgba(34,197,94,.1) 76%, transparent 77%, transparent);
+  background-size: 50px 50px;
+  animation: grid-drift 20s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.3;
+}
+
+@keyframes grid-drift {
+  0% { transform: translateY(0) translateX(0); }
+  100% { transform: translateY(50px) translateX(50px); }
+}
+
+/* Floating particles */
+.particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 50%;
+}
+
+.particle-1 { width: 8px; height: 8px; background: rgba(34,197,94,0.3); animation: float-particle 15s infinite ease-in-out; left: 10%; top: 20%; }
+.particle-2 { width: 6px; height: 6px; background: rgba(16,185,129,0.3); animation: float-particle 18s infinite ease-in-out 2s; left: 80%; top: 60%; }
+.particle-3 { width: 10px; height: 10px; background: rgba(6,182,212,0.2); animation: float-particle 20s infinite ease-in-out 4s; left: 20%; top: 80%; }
+.particle-4 { width: 7px; height: 7px; background: rgba(34,197,94,0.3); animation: float-particle 17s infinite ease-in-out 1s; left: 70%; top: 15%; }
+.particle-5 { width: 5px; height: 5px; background: rgba(16,185,129,0.25); animation: float-particle 19s infinite ease-in-out 3s; left: 40%; top: 90%; }
+
+@keyframes float-particle {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+  25% { transform: translateY(-50px) translateX(30px); opacity: 0.6; }
+  50% { transform: translateY(-100px) translateX(-30px); opacity: 0.3; }
+  75% { transform: translateY(-50px) translateX(50px); opacity: 0.5; }
+}
+
+/* Decorative elements */
+.accent-line {
+  height: 2px;
+  background: linear-gradient(90deg,#22c55e,#10b981,transparent);
+  margin: 16px 0;
+}
+
+/* Animated section divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34,197,94,0.5), transparent);
+  margin: 60px 0;
+  animation: pulse-line 3s ease-in-out infinite;
+}
+
+@keyframes pulse-line {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+/* Floating background shapes - animated */
+.float-shape {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.float-shape-1 {
+  width: 300px;
+  height: 300px;
+  background: #22c55e;
+  top: 10%;
+  left: 5%;
+  animation: float-shape-move 30s ease-in-out infinite;
+}
+
+.float-shape-2 {
+  width: 250px;
+  height: 250px;
+  background: #10b981;
+  top: 50%;
+  right: 10%;
+  animation: float-shape-move 40s ease-in-out infinite reverse;
+}
+
+.float-shape-3 {
+  width: 200px;
+  height: 200px;
+  background: #06b6d4;
+  bottom: 10%;
+  left: 30%;
+  animation: float-shape-move 35s ease-in-out infinite;
+}
+
+@keyframes float-shape-move {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(40px, -50px); }
+  50% { transform: translate(-30px, 60px); }
+  75% { transform: translate(50px, 30px); }
+}
+
+/* Text shimmer effect */
+.shimmer-text {
+  background: linear-gradient(90deg, #a855f7, #3b82f6, #a855f7);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s ease infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Hologram effect */
+.hologram {
+  position: relative;
+  display: inline-block;
+}
+
+.hologram::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #a855f7, #3b82f6, #06b6d4, #a855f7);
+  background-size: 300% 300%;
+  border-radius: inherit;
+  animation: hologram-glow 4s ease infinite;
+  opacity: 0.5;
+  z-index: -1;
+}
+
+@keyframes hologram-glow {
+  0% { background-position: 0% 50%; filter: blur(8px); opacity: 0.3; }
+  50% { background-position: 100% 50%; filter: blur(12px); opacity: 0.7; }
+  100% { background-position: 0% 50%; filter: blur(8px); opacity: 0.3; }
+}
+
+/* Magnetic hover effect */
+.magnetic-item {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Particle burst effect */
+@keyframes particle-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0);
+  }
+}
+
+.particle-burst {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  animation: particle-burst 0.8s ease-out forwards;
+  box-shadow: 0 0 15px rgba(168,85,247,0.8);
+}
+
+/* Staggered entrance */
+.stagger-enter {
+  animation: stagger-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Project card entrance */
+.project-card {
+  animation: card-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes card-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Smooth section transitions */
+.section-fade-in {
+  animation: fade-in-section 0.8s ease-out forwards;
+}
+
+@keyframes fade-in-section {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth skill bar fill */
+.skill-bar-enhanced .fill {
+  transition: width 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Enhanced button interaction */
+.btn-primary, .btn-outline {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after, .btn-outline::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.btn-primary:active::after, .btn-outline:active::after {
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}
+
+/* Input focus glow */
+.form-input {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.form-input:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(168,85,247,0.2), inset 0 0 20px rgba(168,85,247,0.05);
+}
+
+/* Smooth stat number animation */
+@keyframes stat-count {
+  0% { opacity: 0; transform: scale(0.5); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.stat-number {
+  animation: stat-count 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Timeline item entrance */
+.timeline-item {
+  opacity: 0;
+  animation: timeline-slide 0.6s ease-out forwards;
+}
+
+@keyframes timeline-slide {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Experience card hover effect */
+.exp-card {
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.exp-card:hover {
+  transform: translateX(8px);
+  box-shadow: 0 20px 60px rgba(168,85,247,0.2);
+}
+
+/* Contact info hover pulse */
+.contact-item {
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+  transform: translateX(4px);
+}
+
+.contact-item:hover .contact-icon {
+  animation: icon-pulse 0.4s ease-out;
+}
+
+@keyframes icon-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Smooth nav underline */
+.nav-link::after {
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Filter button transition */
+.filter-btn {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px);
+}
+
+.filter-btn.active {
+  animation: btn-activate 0.4s ease-out;
+}
+
+@keyframes btn-activate {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Smooth scrollbar animation */
+.app-wrapper::-webkit-scrollbar-thumb {
+  transition: background 0.3s ease;
+}
+
+.app-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(168,85,247,0.5);
+}
+
+/* Cyberpunk scan lines */
+.scanline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(168,85,247,0.5), transparent);
+  animation: scan 8s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes scan {
+  0% { top: 0%; }
+  100% { top: 100%; }
+}
+
+/* Neon text glow */
+.neon-text {
+  text-shadow: none;
+}
+
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow: none;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+  }
+}
+
+/* Liquid morphing shape */
+.liquid-shape {
+  position: fixed;
+  filter: blur(50px);
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+}
+
+.liquid-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle at 30% 40%, #a855f7 0%, transparent 60%);
+  top: 5%;
+  left: 0%;
+  animation: liquid-morph-1 15s ease-in-out infinite;
+}
+
+.liquid-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle at 70% 60%, #3b82f6 0%, transparent 60%);
+  bottom: 5%;
+  right: 5%;
+  animation: liquid-morph-2 18s ease-in-out infinite;
+}
+
+.liquid-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle at 50% 50%, #06b6d4 0%, transparent 60%);
+  top: 40%;
+  left: 40%;
+  animation: liquid-morph-3 20s ease-in-out infinite;
+}
+
+@keyframes liquid-morph-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(50px, -80px) scale(1.1); }
+  50% { transform: translate(-40px, 60px) scale(0.95); }
+  75% { transform: translate(80px, 40px) scale(1.05); }
+}
+
+@keyframes liquid-morph-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-60px, 70px) scale(1.05); }
+  50% { transform: translate(50px, -50px) scale(0.98); }
+  75% { transform: translate(-50px, -60px) scale(1.02); }
+}
+
+@keyframes liquid-morph-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(60px, 50px) scale(0.9); }
+  50% { transform: translate(-50px, -70px) scale(1.1); }
+  75% { transform: translate(40px, -30px) scale(0.95); }
+}
+
+/* Radial energy pulse */
+.energy-pulse {
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,85,247,0.4) 0%, rgba(168,85,247,0) 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.pulse-ripple {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #a855f7;
+  animation: energy-ripple 1.5s ease-out forwards;
+}
+
+@keyframes energy-ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+  }
+}
+
+/* Star field background */
+.star-field {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* Glitch effect */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+  animation: glitch-anim 2s infinite;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.glitch-text::before {
+  animation: glitch-1 0.3s infinite;
+  color: #a855f7;
+  z-index: -1;
+}
+
+.glitch-text::after {
+  animation: glitch-2 0.3s infinite;
+  color: #3b82f6;
+  z-index: -2;
+}
+
+@keyframes glitch-anim {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-1 {
+  0% { clip-path: inset(0 0 0 0); }
+  20% { clip-path: inset(0 0 65% 0); }
+  40% { clip-path: inset(28% 0 58% 0); }
+  60% { clip-path: inset(54% 0 7% 0); }
+  80% { clip-path: inset(63% 0 10% 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes glitch-2 {
+  0% { clip-path: inset(0 0 0 0); }
+  20% { clip-path: inset(0 0 0 40%); }
+  40% { clip-path: inset(37% 0 58% 0); }
+  60% { clip-path: inset(3% 0 58% 0); }
+  80% { clip-path: inset(22% 0 77% 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+/* Orb interaction */
+.interactive-orb {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle at 30% 30%, rgba(168,85,247,0.8), rgba(59,130,246,0.2));
+  border-radius: 50%;
+  box-shadow: 0 0 60px rgba(168,85,247,0.6), inset -2px -2px 5px rgba(0,0,0,0.5);
+  filter: blur(1px);
+}
+
+/* Cyber grid effect */
+.cyber-grid {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(0deg, transparent 24%, rgba(168,85,247,0.05) 25%, rgba(168,85,247,0.05) 26%, transparent 27%, transparent 74%, rgba(168,85,247,0.05) 75%, rgba(168,85,247,0.05) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(168,85,247,0.05) 25%, rgba(168,85,247,0.05) 26%, transparent 27%, transparent 74%, rgba(168,85,247,0.05) 75%, rgba(168,85,247,0.05) 76%, transparent 77%, transparent);
+  background-size: 100px 100px;
+  animation: grid-perspective 20s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+  perspective: 1000px;
+}
+
+@keyframes grid-perspective {
+  0% {
+    background-position: 0 0;
+    transform: perspective(1000px) rotateX(0deg);
+  }
+  50% {
+    transform: perspective(1000px) rotateX(2deg);
+  }
+  100% {
+    background-position: 0 100px;
+    transform: perspective(1000px) rotateX(0deg);
+  }
+}
+
+/* Aurora borealis effect */
+.aurora {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.aurora::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(168,85,247,0.1) 20%,
+    rgba(99,102,241,0.1) 40%,
+    rgba(59,130,246,0.1) 50%,
+    rgba(6,182,212,0.1) 60%,
+    rgba(99,102,241,0.1) 80%,
+    transparent
+  );
+  animation: aurora-wave 8s ease-in-out infinite;
+  transform: skewY(-10deg);
+}
+
+@keyframes aurora-wave {
+  0%, 100% {
+    transform: skewY(-10deg) translateX(-10%);
+  }
+  50% {
+    transform: skewY(-10deg) translateX(10%);
+  }
+}
+
+/* Hover glow effect */
+.glow-hover {
+  transition: all 0.3s ease;
+}
+
+.glow-hover:hover {
+  box-shadow: 0 0 30px rgba(168,85,247,0.4), inset 0 0 30px rgba(168,85,247,0.1);
+}
+
+/* Animated gradient border */
+.gradient-border {
+  position: relative;
+  background: linear-gradient(var(--bg), var(--bg)) padding-box;
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, #a855f7, #3b82f6, #06b6d4) 1;
+  animation: gradient-shift 4s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { border-image-source: linear-gradient(135deg, #a855f7, #3b82f6, #06b6d4); }
+  50% { border-image-source: linear-gradient(135deg, #3b82f6, #06b6d4, #a855f7); }
+}
+
+.skill-bar-enhanced {
+  position: relative;
+  height: 10px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.skill-bar-enhanced .fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg,#a855f7,#ec4899,#3b82f6);
+  box-shadow: 0 0 25px rgba(168,85,247,0.8), 0 0 40px rgba(236,72,153,0.5);
+  transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Icon animation */
+.icon-bounce {
+  display: inline-block;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Card entrance animation */
+.card-enter {
+  animation: float-in 0.6s ease-out forwards;
+}
+
+.reveal-section {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.reveal-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Project card click pulse */
+@keyframes pulse-click {
+  0% {
+    opacity: 1;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+
+/* Card bounce effect */
+@keyframes card-bounce {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-12px) scale(1.02);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+  75% {
+    transform: translateY(-8px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Button bounce effect */
+@keyframes button-bounce {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-10px) scale(1.02);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.05);
+  }
+  75% {
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.btn-bounce {
+  animation: button-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full"><!-- Animated background layer -->
+  <div class="bg-grid"></div>
+  <div class="float-shape float-shape-1"></div>
+  <div class="float-shape float-shape-2"></div>
+  <div class="float-shape float-shape-3"></div><!-- Floating particles -->
+  <div class="particle particle-1"></div>
+  <div class="particle particle-2"></div>
+  <div class="particle particle-3"></div>
+  <div class="particle particle-4"></div>
+  <div class="particle particle-5"></div><!-- Scanline effect -->
+  <div class="scanline"></div><!-- Liquid morphing shapes -->
+  <div class="liquid-shape liquid-1"></div>
+  <div class="liquid-shape liquid-2"></div>
+  <div class="liquid-shape liquid-3"></div><!-- Aurora effect -->
+  <div class="aurora"></div><!-- Cyber grid -->
+  <div class="cyber-grid"></div>
+  <div class="app-wrapper" id="appWrapper"><!-- NAV -->
+   <nav class="fixed top-0 left-0 right-0 z-50" style="background:rgba(10,10,26,0.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.05)">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between"><a href="#hero" class="font-bold text-lg" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#3b82f6);padding:2px;overflow:hidden"><img src="https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-6/671174672_122191325558766968_2146783314959942852_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=101&ccb=1-7&_nc_sid=13d280&_nc_eui2=AeGFpUzT2puWiTwXaLXSvC-aAnqFqWIjowsCeoWpYiOjC0fPJ0GMS3lF_pkn-BsuCPMwlwTqT9-VSLvnthpfjhrR&_nc_ohc=Ob7KY5trBp4Q7kNvwETZq61&_nc_oc=AdpHV2z6s0K0Vo_okHLMVf7gsk57wksX0iJrAWBpMR5DOSKuGlwvuNwoXZa3Rv5Qydk&_nc_zt=23&_nc_ht=scontent.fhan3-3.fna&_nc_gid=KeJnOegSuCG-yXOQZ9ED4A&_nc_ss=7a3a8&oh=00_Af3AC3eFw4iK74J0pkExbIj39TEh5gqtF45P7QJV45aSEw&oe=69E6E6B0" alt="Logo" style="width:100%;height:100%;border-radius:50%;object-fit:cover;background:#0a0a1a" loading="lazy" onerror="console.error('Logo failed to load:', this.src); this.style.display='none'; this.parentElement.innerHTML='HP.'; this.parentElement.style.background='linear-gradient(135deg,#a855f7,#3b82f6)'; this.parentElement.style.webkitBackgroundClip='text'; this.parentElement.style.webkitTextFillColor='transparent'; this.parentElement.style.display='flex'; this.parentElement.style.alignItems='center'; this.parentElement.style.justifyContent='center'; this.parentElement.style.fontSize='14px'; this.parentElement.style.fontWeight='bold'"></a>
+     <div class="hidden md:flex gap-8 text-sm"><a href="#hero" class="nav-link">Trang chủ</a> <a href="#about" class="nav-link">Về tôi</a> <a href="#projects" class="nav-link">Dự án</a> <a href="#skills" class="nav-link">Kỹ năng</a> <a href="#experience" class="nav-link">Kinh nghiệm</a> <a href="#contact" class="nav-link">Liên hệ</a>
+     </div><button id="mobileMenuBtn" class="md:hidden text-white" aria-label="Menu"><i data-lucide="menu" style="width:24px;height:24px"></i></button>
+    </div><!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden px-6 pb-4 flex flex-col gap-3 text-sm"><a href="#hero" class="nav-link py-2">Trang chủ</a> <a href="#about" class="nav-link py-2">Về tôi</a> <a href="#projects" class="nav-link py-2">Dự án</a> <a href="#skills" class="nav-link py-2">Kỹ năng</a> <a href="#experience" class="nav-link py-2">Kinh nghiệm</a> <a href="#contact" class="nav-link py-2">Liên hệ</a>
+    </div>
+   </nav><!-- HERO -->
+   <section id="hero" class="relative min-h-screen flex items-center justify-center text-center px-6" style="padding-top:80px">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="relative z-10 max-w-2xl mx-auto">
+     <div class="avatar-glow mx-auto mb-8">
+      <div class="avatar-inner" style="overflow:hidden;">
+  <!-- ảnh đại diện -->
+  <img src="https://scontent.fsgn5-7.fna.fbcdn.net/v/t39.30808-6/486419229_122118718922766968_5517283650790658580_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeFZhYXDVR2rdSSwYZ-zxLpjJmB-OMsIcBEmYH44ywhwEYo4c0ZVoyBv-i4ZHXflHlg6l7-8Q5wYxiEcb7KZdIVW&_nc_ohc=GKD2cj1MUP0Q7kNvwGWwWFb&_nc_oc=AdppUERDyQXnrFYdn3scy2FeoCnutaXglfJf_gJkmNOSx5WF7Vato-mweh2CZZ9uqR9LpzaTo1YhQTjxciRfp08V&_nc_zt=23&_nc_ht=scontent.fsgn5-7.fna&_nc_gid=3tRslaB0kA2JH_daMdnRUg&_nc_ss=7a3a8&oh=00_Af0b0faQZ0KYxQI6fVqDN7zD868hWpJltYBX6xTalawSwg&oe=69E70D25" 
+       alt="Nguyễn Trần Hoàng Phúc" 
+       style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+</div>
+     </div>
+     <h1 id="heroName" class="text-4xl md:text-6xl font-900 mb-4" style="font-weight:900;line-height:1.1;text-transform:uppercase;font-family:'Times New Roman', 'Garamond', serif;background:linear-gradient(90deg,#a855f7 0%,#ec4899 25%,#3b82f6 50%,#06b6d4 75%,#a855f7 100%);background-size:400% 400%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:hero-name-flow 5s ease infinite,hero-name-pulse 2.5s ease-in-out infinite;letter-spacing:0.05em;text-shadow:0 0 60px rgba(168,85,247,0.5),0 0 100px rgba(236,72,153,0.3),inset 0 0 20px rgba(59,130,246,0.2);filter:drop-shadow(0 0 30px rgba(168,85,247,0.4)) drop-shadow(0 0 60px rgba(236,72,153,0.2))">Nguyễn Trần<br>
+       Hoàng Phúc</h1>
+     <p id="heroSubtitle" class="text-lg md:text-xl mb-4" style="background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600">PR Student · Designer · Content Creator</p>
+     <p id="heroDesc" class="text-base mb-8" style="color:rgba(255,255,255,0.5);max-width:480px;margin-left:auto;margin-right:auto">Xin chào, Tôi là người năng động, tỉ mỉ, sáng tạo, có trách nhiệm và luôn muốn mang lại năng lượng tích cực, truyền cảm hứng cho mọi người.</p>
+     <div class="flex flex-wrap justify-center gap-4"><a href="#projects" class="btn-primary"><i data-lucide="eye" style="width:18px;height:18px"></i> Xem dự án</a> <a href="#contact" class="btn-outline"><i data-lucide="mail" style="width:18px;height:18px"></i> Liên hệ</a>
+     </div>
+    </div>
+   </section><!-- ABOUT -->
+   <section id="about" class="reveal-section py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="text-3xl md:text-4xl font-800 text-center mb-16" style="font-weight:800">VỀ <span style="background:linear-gradient(135deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">TÔI</span></h2>
+     <div class="grid md:grid-cols-2 gap-12 items-center"><!-- Left: avatar card -->
+      <div class="glass p-8 flex flex-col items-center text-center neon-card card-shine" style="position:relative;border-radius:20px">
+       <div class="accent-line" style="width:40%;margin-left:auto;margin-right:auto"></div>
+       <div style="width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#6366f1);display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:800;color:#fff;margin-bottom:24px;box-shadow:0 0 40px rgba(168,85,247,0.4);animation:float 3s ease-in-out infinite">
+        <img src="https://scontent.fsgn5-7.fna.fbcdn.net/v/t39.30808-6/486419229_122118718922766968_5517283650790658580_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeFZhYXDVR2rdSSwYZ-zxLpjJmB-OMsIcBEmYH44ywhwEYo4c0ZVoyBv-i4ZHXflHlg6l7-8Q5wYxiEcb7KZdIVW&_nc_ohc=GKD2cj1MUP0Q7kNvwGWwWFb&_nc_oc=AdppUERDyQXnrFYdn3scy2FeoCnutaXglfJf_gJkmNOSx5WF7Vato-mweh2CZZ9uqR9LpzaTo1YhQTjxciRfp08V&_nc_zt=23&_nc_ht=scontent.fsgn5-7.fna&_nc_gid=3tRslaB0kA2JH_daMdnRUg&_nc_ss=7a3a8&oh=00_Af0b0faQZ0KYxQI6fVqDN7zD868hWpJltYBX6xTalawSwg&oe=69E70D25" 
+       alt="Nguyễn Trần Hoàng Phúc" 
+       style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+       </div>
+       <div class="grid grid-cols-3 gap-4 w-full mt-4">
+        <div class="stat-card glass pulse-border-animation" style="border:2px solid rgba(168,85,247,0.3);border-radius:16px;animation:pulse-border 2.5s ease-in-out infinite">
+         <div class="stat-number gradient-text">
+          30+
+         </div>
+         <div class="text-xs mt-1" style="color:rgba(255,255,255,0.5)">
+          Dự án thiết kế 
+         </div>
+        </div>
+        <div class="stat-card glass pulse-border-animation" style="border:2px solid rgba(99,102,241,0.3);border-radius:16px;animation:pulse-border 2.5s ease-in-out infinite 0.3s">
+         <div class="stat-number gradient-text">
+          3+
+         </div>
+         <div class="text-xs mt-1" style="color:rgba(255,255,255,0.5)">
+          Dự án sự kiện
+         </div>
+        </div>
+        <div class="stat-card glass pulse-border-animation" style="border:2px solid rgba(59,130,246,0.3);border-radius:16px;animation:pulse-border 2.5s ease-in-out infinite 0.6s">
+         <div class="stat-number gradient-text">
+          4+
+         </div>
+         <div class="text-xs mt-1" style="color:rgba(255,255,255,0.5)">
+          Năm kinh nghiệm Design
+         </div>
+        </div>
+       </div>
+       <div class="accent-line" style="width:40%;margin-left:auto;margin-right:auto"></div>
+      </div><!-- Right: text -->
+      <div>
+       <p id="aboutText" class="text-base leading-relaxed mb-6" style="color:rgba(255,255,255,0.7)">Mình là Hoàng Phúc — sinh viên ngành Quan hệ Công chúng với niềm đam mê thiết kế và sáng tạo nội dung. Mình tin rằng mỗi thiết kế đều kể một câu chuyện, và mỗi chiến dịch truyền thông đều có sức mạnh thay đổi cách mọi người nhìn nhận thế giới.</p>
+       <p class="text-base leading-relaxed mb-6" style="color:rgba(255,255,255,0.7)">Với tư duy sáng tạo, khả năng làm việc nhóm và tinh thần học hỏi không ngừng, mình luôn tìm kiếm những cơ hội để phát triển bản thân và tạo ra giá trị.</p>
+       <div class="flex flex-wrap gap-3"><span class="glass px-4 py-2 text-sm neon-card" style="color:#a855f7;position:relative;border-radius:12px">🎨 Design</span> <span class="glass px-4 py-2 text-sm neon-card" style="color:#6366f1;position:relative;border-radius:12px">📢 PR</span> <span class="glass px-4 py-2 text-sm neon-card" style="color:#3b82f6;position:relative;border-radius:12px">✍️ Content</span> <span class="glass px-4 py-2 text-sm neon-card" style="color:#8b5cf6;position:relative;border-radius:12px">📷 Media</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- PROJECTS -->
+   <section id="projects" class="reveal-section py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="text-3xl md:text-4xl font-800 text-center mb-6" style="font-weight:800">DỰ <span style="background:linear-gradient(135deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">ÁN</span></h2>
+     <p class="text-center mb-12" style="color:rgba(255,255,255,0.4)">Một số dự án tiêu biểu</p>
+     <div class="flex flex-wrap justify-center gap-3 mb-12"><button class="filter-btn active" data-filter="all" style="position:relative;overflow:hidden">Tất cả</button> <button class="filter-btn" data-filter="design" style="position:relative;overflow:hidden">Design</button> <button class="filter-btn" data-filter="media" style="position:relative;overflow:hidden">Media</button> <button class="filter-btn" data-filter="branding" style="position:relative;overflow:hidden">Branding</button>
+     </div>
+     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="projectGrid"><!-- Cards generated by JS -->
+     </div>
+    </div>
+   </section><!-- SKILLS -->
+   <section id="skills" class="reveal-section py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="text-3xl md:text-4xl font-800 text-center mb-16" style="font-weight:800">KỸ <span style="background:linear-gradient(135deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">NĂNG</span></h2>
+     <div class="grid md:grid-cols-2 gap-12"><!-- Design tools -->
+      <div class="glass p-8">
+       <h3 class="text-xl font-700 mb-6 flex items-center gap-3" style="font-weight:700"><i data-lucide="palette" style="width:22px;height:22px;color:#a855f7;animation:bounce 2s ease-in-out infinite;display:inline-block"></i> Thiết kế & lập trình</h3>
+       <div class="space-y-5" id="designSkills"></div>
+      </div><!-- Soft skills -->
+      <div class="glass p-8">
+       <h3 class="text-xl font-700 mb-6 flex items-center gap-3" style="font-weight:700"><i data-lucide="brain" style="width:22px;height:22px;color:#6366f1;animation:bounce 2s ease-in-out infinite 0.2s;display:inline-block"></i> Kỹ năng mềm</h3>
+       <div class="space-y-5" id="softSkills"></div>
+      </div>
+     </div>
+    </div>
+   </section><!-- EXPERIENCE -->
+   <section id="experience" class="reveal-section py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+     <h2 class="text-3xl md:text-4xl font-800 text-center mb-16" style="font-weight:800">KINH <span style="background:linear-gradient(135deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">NGHIỆM</span></h2>
+     <div class="max-w-2xl mx-auto relative pl-12" id="timeline">
+      <div class="timeline-line"></div>
+     </div>
+    </div>
+   </section><!-- CONTACT -->
+   <section id="contact" class="reveal-section py-24 px-6">
+    <div class="max-w-4xl mx-auto">
+     <div class="accent-line" style="width:80px;margin-left:auto;margin-right:auto;margin-bottom:24px"></div>
+     <h2 class="text-3xl md:text-4xl font-800 text-center mb-16" style="font-weight:800">LIÊN <span class="gradient-text">HỆ</span></h2>
+     <div class="accent-line" style="width:80px;margin-left:auto;margin-right:auto;margin-bottom:24px"></div>
+     <div class="grid md:grid-cols-2 gap-8"><!-- Info -->
+      <div class="glass p-8 space-y-6 neon-card" style="position:relative;border-radius:20px">
+       <h3 class="text-xl font-700 mb-4" style="font-weight:700">Thông tin liên hệ</h3>
+       <div class="flex items-center gap-4 group cursor-pointer contact-item">
+        <div class="contact-icon" style="width:44px;height:44px;border-radius:12px;background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;group-hover:background:rgba(168,85,247,0.25);group-hover:box-shadow:0 0 20px rgba(168,85,247,0.3)">
+         <i data-lucide="mail" style="width:20px;height:20px;color:#a855f7"></i>
+        </div>
+        <div>
+         <div class="text-xs" style="color:rgba(255,255,255,0.4)">
+          Email
+         </div>
+         <div id="contactEmail" class="text-sm font-500" style="font-weight:500">
+          <a href="mailto:nguyentranhoanghuc.zica@gmail.com">nguyentranhoangphuc.zica@gmail.com</a>
+         </div>
+        </div>
+       </div>
+       <div class="flex items-center gap-4 group cursor-pointer contact-item">
+        <div class="contact-icon" style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;group-hover:background:rgba(99,102,241,0.25);group-hover:box-shadow:0 0 20px rgba(99,102,241,0.3)">
+         <i data-lucide="phone" style="width:20px;height:20px;color:#6366f1"></i>
+        </div>
+        <div>
+         <div class="text-xs" style="color:rgba(255,255,255,0.4)">
+          Phone
+         </div>
+         <div id="contactPhone" class="text-sm font-500" style="font-weight:500">
+          <a href='tel: +84967195053' > 0967195053 </a>
+         </div>
+        </div>
+       </div>
+       <div class="flex items-center gap-4 group cursor-pointer contact-item">
+        <div class="contact-icon" style="width:44px;height:44px;border-radius:12px;background:rgba(59,130,246,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;group-hover:background:rgba(59,130,246,0.25);group-hover:box-shadow:0 0 20px rgba(59,130,246,0.3)">
+         <i data-lucide="facebook" style="width:20px;height:20px;color:#3b82f6"></i>
+        </div>
+        <div>
+         <div class="text-xs" style="color:rgba(255,255,255,0.4)">
+          Facebook
+         </div>
+         <div class="text-sm font-500" style="font-weight:500">
+          <a href="https://www.facebook.com/nguyentranhoangphuc.zica">Nguyen Tran Hoang Phuc</a>
+         </div>
+        </div>
+       </div>
+      </div><!-- Form -->
+      <div class="glass p-8 neon-card" style="position:relative;border-radius:20px">
+       <h3 class="text-xl font-700 mb-6" style="font-weight:700">Gửi tin nhắn</h3>
+       <form id="contactForm" class="space-y-4"><input type="text" class="form-input" placeholder="Họ và tên" required aria-label="Họ và tên"> <input type="email" class="form-input" placeholder="Email" required aria-label="Email"> <textarea class="form-input" rows="4" placeholder="Nội dung tin nhắn..." required aria-label="Nội dung"></textarea> <button type="submit" class="btn-primary w-full justify-center transition-transform hover:scale-105"><i data-lucide="send" style="width:18px;height:18px"></i> Gửi tin nhắn</button>
+       </form>
+       <div id="formSuccess" class="hidden mt-4 text-center text-sm" style="color:#a855f7;animation:float-in 0.5s ease-out">
+        ✨ Cảm ơn bạn! Tin nhắn đã được gửi.
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- FOOTER -->
+   <footer class="py-8 px-6 text-center text-sm" style="color:rgba(255,255,255,0.3);border-top:1px solid rgba(255,255,255,0.05)">
+    <p>© 2025 Nguyễn Trần Hoàng Phúc💜</p>
+   </footer>
+  </div>
+  <script>
+// ===== DATA =====
+const projects = [
+  {cat:'design',title:'Poster Sự Kiện',desc:'Thiết kế poster cho sự kiện trường',emoji:'🎨',gradient:'linear-gradient(135deg,#a855f7,#6366f1)',link:'#'},
+  {cat:'branding',title:'Logo Câu Lạc Bộ',desc:'Thiết kế logo và bộ nhận diện',emoji:'✏️',gradient:'linear-gradient(135deg,#6366f1,#3b82f6)',link:'#'},
+  {cat:'media',title:'Video Recap',desc:'Dựng video recap sự kiện',emoji:'🎬',gradient:'linear-gradient(135deg,#3b82f6,#06b6d4)',link:'#'},
+  {cat:'design',title:'Banner Social Media',desc:'Thiết kế banner cho fanpage',emoji:'📱',gradient:'linear-gradient(135deg,#8b5cf6,#a855f7)',link:'#'},
+  {cat:'branding',title:'Slide Pitch Deck',desc:'Thiết kế slide thuyết trình',emoji:'📊',gradient:'linear-gradient(135deg,#6366f1,#8b5cf6)',link:'#'},
+  {cat:'media',title:'Content Campaign',desc:'Lên kế hoạch nội dung MXH',emoji:'📝',gradient:'linear-gradient(135deg,#3b82f6,#6366f1)',link:'#'},
+];
+
+const designSkills = 
+[{name:'Canva',pct:90},
+{name:'CapCut',pct:70},
+{name:'Ngôn ngữ lập trình HTML',pct:90},
+{name:'Word-Excel-Powerpoint',pct:85},
+];
+const softSkills = 
+[{name:'Giao tiếp',pct:90},
+{name:'Làm việc nhóm',pct:88},
+{name:'Tư duy sáng tạo',pct:92},
+{name:'Quản lý thời gian',pct:80},
+{name:'Thuyết trình',pct:85}];
+
+const experiences = [
+  {year:'2025',title:'CTV Đoàn Khoa',org:'Khoa Khoa học Xã hội và Quan hệ Công chúng - HUTECH',desc:'Đảm nhận vị trí design'},
+  {year:'2025',title:'Sinh viên PR năm nhất, Bí Thư Chi Đoàn 25DQCA1',org:'HUTECH',desc:'Bắt đầu quá trình học tập đại học'},
+  {year:'2024',title:'Đội trưởng Đội Phát thanh & Truyền thông',org:'Trường THPT Cái Bè',desc:'Quản lí, Điều hành Đội đồng thời đảm nhiệm vị trí desgin, content'},
+  {year:'2022-2025',title:'Bí Thư Chi Đoàn A12',org:'Trường THPT Cái Bè',desc:'Quản lí, Điều hành hoạt động Đoàn ở Chi Đoàn'},
+];
+
+// ===== RENDER PROJECTS =====
+const projectGrid = document.getElementById('projectGrid');
+let currentFilter = 'all';
+
+function renderProjects(filter) {
+  currentFilter = filter;
+  const filtered = filter === 'all' ? projects : projects.filter(p => p.cat === filter);
+  projectGrid.innerHTML = '';
+  filtered.forEach((p, i) => {
+    const card = document.createElement('a');
+    card.href = p.link;
+    card.target = '_blank';
+    card.rel = 'noopener noreferrer';
+    card.className = 'project-card glass overflow-hidden neon-card card-shine';
+    card.style.animationDelay = `${i * 0.12}s`;
+    card.style.cursor = 'pointer';
+    card.style.textDecoration = 'none';
+    card.style.border = 'none';
+    card.style.background = 'transparent';
+    card.style.padding = '0';
+    card.style.textAlign = 'left';
+    card.style.width = '100%';
+    card.style.position = 'relative';
+    card.innerHTML = `
+      <div style="height:180px;background:${p.gradient};display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;box-shadow:inset 0 0 40px rgba(0,0,0,0.3);transition:all 0.4s cubic-bezier(0.22,1,0.36,1);border-radius:20px 20px 0 0">
+        ${p.emoji}
+        <div class="card-overlay" style="position:absolute;inset:0;background:rgba(10,10,26,0.7);display:flex;align-items:center;justify-content:center;border-radius:20px 20px 0 0;opacity:0;transition:opacity 0.3s ease">
+          <span style="color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px"><i data-lucide="arrow-right" style="width:16px;height:16px"></i> Xem chi tiết</span>
+        </div>
+      </div>
+      <div class="p-5" style="background:rgba(10,10,26,0.5);border-radius:0 0 20px 20px;transition:background 0.3s ease">
+        <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(168,85,247,0.15);color:#a855f7;display:inline-block;font-weight:600">${p.cat}</span>
+        <h4 class="text-base font-600 mt-3" style="font-weight:600;transition:color 0.3s ease">${p.title}</h4>
+        <p class="text-sm mt-1" style="color:rgba(255,255,255,0.4);transition:color 0.3s ease">${p.desc}</p>
+      </div>`;
+    card.addEventListener('mouseenter', () => {
+      card.querySelector('.card-overlay').style.opacity = '1';
+      card.querySelector('div:last-child').style.background = 'rgba(168,85,247,0.1)';
+    });
+    card.addEventListener('mouseleave', () => {
+      card.querySelector('.card-overlay').style.opacity = '0';
+      card.querySelector('div:last-child').style.background = 'rgba(10,10,26,0.5)';
+    });
+    card.addEventListener('click', (e) => {
+      // Bounce effect
+      card.style.animation = 'card-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      setTimeout(() => card.style.animation = '', 500);
+      
+      // Pulse ripple
+      const pulse = document.createElement('div');
+      pulse.style.position = 'absolute';
+      pulse.style.width = '100%';
+      pulse.style.height = '100%';
+      pulse.style.background = 'rgba(255,255,255,0.2)';
+      pulse.style.borderRadius = '20px';
+      pulse.style.animation = 'pulse-click 0.6s ease-out';
+      card.style.position = 'relative';
+      card.appendChild(pulse);
+      setTimeout(() => pulse.remove(), 600);
+    });
+    projectGrid.appendChild(card);
+  });
+  lucide.createIcons();
+}
+renderProjects('all');
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProjects(btn.dataset.filter);
+  });
+});
+
+// ===== RENDER SKILLS =====
+function renderSkillBars(containerId, skills) {
+  const container = document.getElementById(containerId);
+  skills.forEach((s, idx) => {
+    const div = document.createElement('div');
+    div.innerHTML = `<div class="text-sm mb-2"><span class="font-500" style="font-weight:500">${s.name}</span></div><div class="skill-bar-enhanced"><div class="fill" style="width:${s.pct}%;transition:width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${idx * 0.15}s;"></div></div>`;
+    container.appendChild(div);
+  });
+}
+renderSkillBars('designSkills', designSkills);
+renderSkillBars('softSkills', softSkills);
+
+// ===== RENDER TIMELINE =====
+const timeline = document.getElementById('timeline');
+experiences.forEach((exp, idx) => {
+  const item = document.createElement('div');
+  item.className = 'timeline-item exp-card relative mb-10 pl-6';
+  item.style.animationDelay = `${idx * 0.15}s`;
+  item.innerHTML = `<div class="timeline-dot"></div><div class="glass p-5"><span class="text-xs font-600 px-3 py-1 rounded-full" style="background:rgba(168,85,247,0.15);color:#a855f7;font-weight:600">${exp.year}</span><h4 class="text-base font-600 mt-3" style="font-weight:600;transition:color 0.3s ease">${exp.title}</h4><p class="text-sm" style="color:#a855f7;transition:color 0.3s ease">${exp.org}</p><p class="text-sm mt-2" style="color:rgba(255,255,255,0.4);transition:color 0.3s ease">${exp.desc}</p></div>`;
+  timeline.appendChild(item);
+});
+
+// ===== SCROLL REVEAL =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal-section').forEach(s => observer.observe(s));
+
+// Skill bar animation
+const skillObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.skill-fill').forEach(bar => { bar.style.width = bar.dataset.width; });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('#designSkills, #softSkills').forEach(s => skillObserver.observe(s));
+
+// ===== MOBILE MENU =====
+document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+});
+document.querySelectorAll('#mobileMenu a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('mobileMenu').classList.add('hidden'));
+});
+
+// ===== CONTACT FORM =====
+document.getElementById('contactForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  // Particle burst effect
+  const rect = e.target.querySelector('button').getBoundingClientRect();
+  for (let i = 0; i < 8; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle-burst';
+    const angle = (i / 8) * Math.PI * 2;
+    particle.style.setProperty('--tx', Math.cos(angle) * 100 + 'px');
+    particle.style.setProperty('--ty', Math.sin(angle) * 100 + 'px');
+    particle.style.left = rect.left + rect.width / 2 + 'px';
+    particle.style.top = rect.top + rect.height / 2 + 'px';
+    particle.style.width = '8px';
+    particle.style.height = '8px';
+    particle.style.background = i % 2 ? '#a855f7' : '#3b82f6';
+    particle.style.borderRadius = '50%';
+    document.body.appendChild(particle);
+    setTimeout(() => particle.remove(), 800);
+  }
+  
+  document.getElementById('formSuccess').classList.remove('hidden');
+  e.target.reset();
+  setTimeout(() => document.getElementById('formSuccess').classList.add('hidden'), 3000);
+});
+
+// ===== ELEMENT SDK =====
+const defaultConfig = {
+  hero_name: 'Nguyễn Trần Hoàng Phúc',
+  hero_subtitle: 'PR Student · Designer · Content Creator',
+  hero_description: 'Sáng tạo không giới hạn — kết nối thương hiệu, truyền cảm hứng qua thiết kế và nội dung.',
+  about_text: 'Mình là Hoàng Phúc — sinh viên ngành Quan hệ Công chúng với niềm đam mê thiết kế và sáng tạo nội dung.',
+  contact_email: 'nguyentranhoangphuc.zica@gmail.com',
+  contact_phone: '0967 195 053',
+  background_color: '#0a0a1a',
+  surface_color: 'rgba(255,255,255,0.05)',
+  text_color: '#e8e4f0',
+  primary_color: '#a855f7',
+  secondary_color: '#6366f1',
+  font_family: 'Outfit',
+  font_size: 16,
+};
+
+function applyConfig(config) {
+  const c = key => config[key] || defaultConfig[key];
+  // Text
+  const heroName = document.getElementById('heroName');
+  const name = c('hero_name');
+  const parts = name.split(' ');
+  if (parts.length > 2) {
+    heroName.innerHTML = parts.slice(0, -2).join(' ') + '<br>' + parts.slice(-2).join(' ');
+  } else {
+    heroName.textContent = name;
+  }
+  document.getElementById('heroSubtitle').textContent = c('hero_subtitle');
+  document.getElementById('heroDesc').textContent = c('hero_description');
+  document.getElementById('aboutText').textContent = c('about_text');
+  document.getElementById('contactEmail').textContent = c('contact_email');
+  document.getElementById('contactPhone').textContent = c('contact_phone');
+
+  // Font
+  const font = c('font_family');
+  const baseSize = c('font_size');
+  document.body.style.fontFamily = `${font}, Outfit, Time newroman`;
+  heroName.style.fontSize = `${baseSize * 3}px`;
+  document.getElementById('heroSubtitle').style.fontSize = `${baseSize * 1.25}px`;
+  document.getElementById('heroDesc').style.fontSize = `${baseSize}px`;
+
+  // Colors
+  document.documentElement.style.setProperty('--bg', c('background_color'));
+  document.documentElement.style.setProperty('--primary', c('primary_color'));
+  document.documentElement.style.setProperty('--secondary', c('secondary_color'));
+  document.documentElement.style.setProperty('--text', c('text_color'));
+  document.querySelector('.app-wrapper').style.background = c('background_color');
+  document.querySelector('.app-wrapper').style.color = c('text_color');
+}
+
+// Add bounce effect to all buttons
+document.addEventListener('click', (e) => {
+  if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+    const btn = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
+    btn.classList.add('btn-bounce');
+    setTimeout(() => btn.classList.remove('btn-bounce'), 500);
+  }
+});
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => applyConfig(config),
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+      { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+      { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+      { get: () => config.primary_color || defaultConfig.primary_color, set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+      { get: () => config.secondary_color || defaultConfig.secondary_color, set: (v) => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } },
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } },
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ['hero_name', config.hero_name || defaultConfig.hero_name],
+    ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
+    ['hero_description', config.hero_description || defaultConfig.hero_description],
+    ['about_text', config.about_text || defaultConfig.about_text],
+    ['contact_email', config.contact_email || defaultConfig.contact_email],
+    ['contact_phone', config.contact_phone || defaultConfig.contact_phone],
+  ]),
+});
+
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ed52f9e35168325',t:'MTc3NjM2MzQzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
