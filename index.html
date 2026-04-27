@@ -4,1345 +4,1344 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hoàng Phúc Portfolio</title>
+  
+  <link rel="icon" type="image/jpeg" href="https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-6/671174672_122191325558766968_2146783314959942852_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=101&ccb=1-7&_nc_sid=13d280&_nc_eui2=AeGFpUzT2puWiTwXaLXSvC-aAnqFqWIjowsCeoWpYiOjC0fPJ0GMS3lF_pkn-BsuCPMwlwTqT9-VSLvnthpfjhrR&_nc_ohc=Ob7KY5trBp4Q7kNvwETZq61&_nc_oc=AdpHV2z6s0K0Vo_okHLMVf7gsk57wksX0iJrAWBpMR5DOSKuGlwvuNwoXZa3Rv5Qydk&_nc_zt=23&_nc_ht=scontent.fhan3-3.fna&_nc_gid=KeJnOegSuCG-yXOQZ9ED4A&_nc_ss=7a3a8&oh=00_Af3AC3eFw4iK74J0pkExbIj39TEh5gqtF45P7QJV45aSEw&oe=69E6E6B0">
+  
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
   <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
   <style>
 html{scroll-behavior:smooth;height:100%}
-body{height:100%;margin:0;font-family:'Times New Roman',Georgia,serif;overflow-x:hidden}
+body{
+  height:100%;margin:0;font-family:'Poppins','Outfit',sans-serif;overflow-x:hidden; 
+  background:linear-gradient(135deg,#0a0f1f 0%,#130f24 25%,#0f1224 50%,#160c24 75%,#0a0f1f 100%);
+  background-attachment: fixed;
+}
 *{box-sizing:border-box}
 
 :root{
---bg:#0a1410;--surface:rgba(34,197,94,0.12);--text:#f0fdf4;
---primary:#22c55e;--secondary:#10b981;
+--bg:#0a0f1f;--surface:rgba(168,85,247,0.08);--text:#f0f4f8;
+--primary:#a855f7;--secondary:#7c3aed;
 }
 
-.app-wrapper{height:100%;overflow-y:auto;overflow-x:hidden;background:var(--bg);color:var(--text);position:relative;z-index:10}
+.app-wrapper{height:100%;overflow-y:auto;overflow-x:hidden; color:var(--text);position:relative;z-index:10; background: transparent !important;}
 
-/* Glassmorphism */
-.glass{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:20px}
-
-/* Glow avatar */
-.avatar-glow{
-  width:160px;height:160px;border-radius:50%;
-  background:linear-gradient(135deg,#22c55e,#10b981,#06b6d4);
-  padding:4px;position:relative;
-  animation:glow-pulse 3s ease-in-out infinite;
+/* ===== ARTISTIC GRAIN OVERLAY ===== */
+.bg-grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 15;
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+  opacity: 0.04; mix-blend-mode: overlay;
 }
-.avatar-glow::after{
-  content:'';position:absolute;inset:-8px;border-radius:50%;
-  background:linear-gradient(135deg,#22c55e,#10b981,#06b6d4);
-  filter:blur(20px);opacity:0.5;z-index:-1;
+
+/* ===== NEW: GRID BACKGROUND ===== */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black 20%, transparent 80%);
+  transform: perspective(500px) rotateX(60deg);
+  transform-origin: bottom;
+  height: 200vh; top: -100vh;
 }
-@keyframes glow-pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
 
-.avatar-inner{width:100%;height:100%;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:3.5rem;font-weight:800;color:#a855f7}
+/* ===== NEW: AMBIENT ORBS ===== */
+.ambient-orb {
+  position: fixed; border-radius: 50%; filter: blur(100px); z-index: 0; pointer-events: none;
+  animation: float-orb 20s infinite ease-in-out alternate; opacity: 0.5;
+}
+.orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(168, 85, 247, 0.2); }
+.orb-2 { bottom: -10%; right: -10%; width: 40vw; height: 40vw; background: rgba(236, 72, 153, 0.2); animation-delay: -5s; }
+.orb-3 { top: 30%; left: 50%; width: 30vw; height: 30vw; background: rgba(59, 130, 246, 0.15); animation-delay: -10s; transform: translateX(-50%); }
 
-/* Blob shapes */
-.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.3;pointer-events:none}
-.blob-1{width:400px;height:400px;background:#22c55e;top:-100px;left:-100px}
-.blob-2{width:300px;height:300px;background:#10b981;bottom:-50px;right:-50px}
-.blob-3{width:250px;height:250px;background:#06b6d4;top:50%;left:60%}
+@keyframes float-orb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, 50px) scale(1.1); }
+  100% { transform: translate(-30px, -20px) scale(0.9); }
+}
 
-/* Skill bar */
-.skill-bar{height:8px;border-radius:99px;background:rgba(255,255,255,0.08);overflow:hidden}
-.skill-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#22c55e,#10b981);transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+/* ===== CURSOR GLOW ===== */
+.cursor-glow {
+  position: fixed; width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,85,247,0.15), transparent 60%);
+  pointer-events: none; mix-blend-mode: screen; z-index: 9998;
+  transform: translate(-50%, -50%); transition: width 0.3s ease, height 0.3s ease; filter: blur(20px);
+}
+.cursor-glow-dot {
+  position: fixed; width: 8px; height: 8px; border-radius: 50%; background: #a855f7;
+  pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px #a855f7, 0 0 20px #ec4899; transition: transform 0.1s ease;
+}
+.cursor-glow-dot.active { transform: translate(-50%, -50%) scale(2.5); background: #ec4899; }
 
-/* Timeline */
-.timeline-line{position:absolute;left:20px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,#22c55e,#10b981,transparent)}
-.timeline-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#10b981);border:2px solid var(--bg);position:absolute;left:15px;top:6px;z-index:2}
+/* ===== LOADER ===== */
+#loader {
+  position: fixed; inset: 0; background: linear-gradient(135deg, #0a0f1f, #1a1535);
+  display: flex; align-items: center; justify-content: center; z-index: 10000;
+  opacity: 1; transition: opacity 0.6s ease;
+}
+#loader.hidden { opacity: 0; pointer-events: none; }
+.loader-content { text-align: center; }
+.loader-spinner {
+  width: 50px; height: 50px; border: 3px solid rgba(168,85,247,0.2);
+  border-top: 3px solid #a855f7; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.loader-text { color: #a855f7; font-weight: 600; font-size: 14px; letter-spacing: 2px; font-family: 'Montserrat', sans-serif; }
 
-/* Card hover */
-.project-card{transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease;text-decoration:none;display:block;color:inherit}
-.project-card:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(168,85,247,0.15)}
-.project-card .card-overlay{opacity:0;transition:opacity .3s ease}
+/* ===== BACKGROUND: TWINKLING STARS & FIREFLIES ===== */
+.star-twinkle {
+  position: absolute; background: #fff; border-radius: 50%;
+  box-shadow: 0 0 4px #fff, 0 0 10px #a855f7;
+  animation: twinkle infinite ease-in-out; pointer-events: none; z-index: 1;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(0.5); }
+  50% { opacity: 0.8; transform: scale(1.2); }
+}
+
+@keyframes float-up {
+  0% { transform: translateY(0) scale(0); opacity: 0; }
+  10% { opacity: 1; transform: translateY(-10vh) scale(1); }
+  90% { opacity: 0.8; }
+  100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
+}
+
+/* ===== BACKGROUND: FLOATING GLASSMORPHISM SHAPES ===== */
+.glass-shape {
+  position: fixed; pointer-events: none; z-index: 2;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.1);
+  animation: float-rotate linear infinite;
+  margin-left: var(--mx, 0px);
+  margin-top: var(--my, 0px);
+  transition: margin 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.shape-circle {
+  width: 140px; height: 140px; border-radius: 50%;
+  box-shadow: 0 0 30px rgba(168,85,247,0.2), inset 0 0 20px rgba(168,85,247,0.2);
+  border-color: rgba(168,85,247,0.3); top: 15%; left: 8%; animation-duration: 25s;
+}
+.shape-square {
+  width: 100px; height: 100px; border-radius: 20px;
+  box-shadow: 0 0 30px rgba(236,72,153,0.2), inset 0 0 20px rgba(236,72,153,0.2);
+  border-color: rgba(236,72,153,0.3); bottom: 25%; right: 12%; animation-duration: 30s; animation-direction: reverse;
+}
+.shape-ring {
+  width: 120px; height: 120px; border-radius: 50%; background: transparent;
+  border: 10px solid rgba(59,130,246,0.15); box-shadow: 0 0 25px rgba(59,130,246,0.2);
+  top: 60%; left: 20%; animation-duration: 22s;
+}
+.shape-cross {
+  width: 80px; height: 80px; top: 30%; right: 25%; animation-duration: 28s;
+  background: transparent; border: none; backdrop-filter: none; box-shadow: none;
+}
+.shape-cross::before, .shape-cross::after {
+  content: ''; position: absolute; border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  backdrop-filter: blur(12px); border: 1px solid rgba(168,85,247,0.3); box-shadow: 0 0 20px rgba(168,85,247,0.2);
+}
+.shape-cross::before { top: 30px; left: 0; width: 80px; height: 20px; }
+.shape-cross::after { top: 0; left: 30px; width: 20px; height: 80px; }
+
+@keyframes float-rotate {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  33% { transform: translateY(-40px) rotate(120deg) scale(1.05); }
+  66% { transform: translateY(20px) rotate(240deg) scale(0.95); }
+  100% { transform: translateY(0) rotate(360deg) scale(1); }
+}
+
+/* ===== BACKGROUND: AURORA & SHOOTING STARS ===== */
+.aurora-container { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.aurora-top {
+  position: absolute; top: -30%; left: -20%; width: 140%; height: 60%;
+  background: radial-gradient(ellipse at center, rgba(168,85,247,0.12) 0%, rgba(236,72,153,0.06) 40%, transparent 70%);
+  transform: rotate(-15deg); filter: blur(60px); animation: aurora-wave 15s ease-in-out infinite alternate;
+}
+.aurora-bottom {
+  position: absolute; bottom: -30%; right: -20%; width: 140%; height: 60%;
+  background: radial-gradient(ellipse at center, rgba(59,130,246,0.12) 0%, rgba(124,58,237,0.06) 40%, transparent 70%);
+  transform: rotate(15deg); filter: blur(60px); animation: aurora-wave 20s ease-in-out infinite alternate-reverse;
+}
+@keyframes aurora-wave {
+  0% { transform: rotate(-15deg) translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: rotate(-5deg) translateY(50px) scale(1.1); opacity: 0.8; }
+  100% { transform: rotate(-25deg) translateY(-50px) scale(0.9); opacity: 0.5; }
+}
+
+.shooting-star {
+  position: fixed; top: 0; left: 0; width: 120px; height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+  box-shadow: 0 0 10px rgba(255,255,255,0.4);
+  border-radius: 99px; pointer-events: none; z-index: 3; opacity: 0;
+  transform: rotate(-45deg) translateX(-100%);
+  animation: shooting 8s infinite;
+}
+.star-1 { top: 15%; left: 80%; animation-delay: 0s; }
+.star-2 { top: 35%; left: 20%; animation-delay: 3s; width: 80px;}
+.star-3 { top: -10%; left: 50%; animation-delay: 5s; width: 150px; }
+@keyframes shooting {
+  0% { transform: rotate(-45deg) translateX(-100%); opacity: 1; }
+  5% { transform: rotate(-45deg) translateX(300vw); opacity: 0; }
+  100% { transform: rotate(-45deg) translateX(300vw); opacity: 0; }
+}
+
+/* Base UI Styles */
+.glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.08);border-radius:24px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);}
+.glass:hover{border:1px solid rgba(168,85,247,0.3); box-shadow: 0 15px 45px 0 rgba(168,85,247,0.15);}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center;
+  z-index: 1000; padding: 20px; animation: fadeIn 0.3s ease;
+}
+.modal-overlay.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-content {
+  background: linear-gradient(135deg, rgba(10, 15, 31, 0.95) 0%, rgba(20, 15, 40, 0.95) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 24px; max-width: 1000px; width: 100%; max-height: 90vh;
+  overflow-y: auto; animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(168,85,247,0.15);
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+.modal-close {
+  position: absolute; top: 20px; right: 20px;
+  background: rgba(168, 85, 247, 0.2); border: none; color: #fff;
+  width: 40px; height: 40px; border-radius: 50%;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s ease; z-index: 1001; backdrop-filter: blur(4px);
+}
+.modal-close:hover { background: rgba(168, 85, 247, 0.5); transform: rotate(90deg) scale(1.1); }
+
+.modal-header {
+  position: relative; height: 300px; background-size: cover; background-position: center;
+  border-radius: 23px 23px 0 0; overflow: hidden;
+}
+.modal-header::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.4) 0%, rgba(124, 58, 237, 0.4) 100%); z-index: 1;
+}
+.modal-header-emoji {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 100px; z-index: 0; animation: float 6s ease-in-out infinite;
+}
+
+.modal-body { padding: 40px; color: #f0f4f8; }
+.modal-title {
+  font-size: 32px; font-weight: 800; font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, #a855f7, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin: 0 0 10px 0;
+}
+.modal-category {
+  display: inline-block; background: rgba(168, 85, 247, 0.15); color: #a855f7;
+  padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 600;
+  margin-bottom: 20px; font-family: 'Poppins', sans-serif; border: 1px solid rgba(168,85,247,0.3);
+}
+.modal-description { color: rgba(255, 255, 255, 0.7); line-height: 1.7; margin-bottom: 30px; font-size: 15px; font-family: 'Poppins', sans-serif; }
+.modal-section { margin-bottom: 30px; }
+.modal-section-title {
+  font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 15px;
+  display: flex; align-items: center; gap: 10px; font-family: 'Montserrat', sans-serif;
+}
+.modal-section-title i { color: #a855f7; }
+.modal-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.feature-tag {
+  background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2);
+  padding: 10px 14px; border-radius: 12px; font-size: 14px; color: rgba(255, 255, 255, 0.9);
+  font-family: 'Poppins', sans-serif; text-align: center; backdrop-filter: blur(4px); transition: all 0.3s ease;
+}
+.feature-tag:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); border-color: rgba(168, 85, 247, 0.5); }
+
+/* Gallery Styles */
+.gallery-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 0; }
+.gallery-item {
+  position: relative; overflow: hidden; border-radius: 16px; cursor: pointer;
+  transition: all 0.4s ease; text-decoration: none; display: block;
+  background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2); aspect-ratio: 16/10;
+}
+.gallery-item:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(168, 85, 247, 0.3); border-color: rgba(168, 85, 247, 0.6); }
+.gallery-item-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.gallery-item:hover .gallery-item-image { transform: scale(1.1); }
+.gallery-item-overlay {
+  position: absolute; inset: 0; background: linear-gradient(135deg, rgba(168, 85, 247, 0.85), rgba(124, 58, 237, 0.85));
+  display: flex; align-items: center; justify-content: center; opacity: 0;
+  transition: all 0.4s ease; flex-direction: column; gap: 12px; backdrop-filter: blur(4px);
+}
+.gallery-item:hover .gallery-item-overlay { opacity: 1; }
+.gallery-item-name { color: #fff; font-size: 16px; font-weight: 600; text-align: center; font-family: 'Poppins', sans-serif; transform: translateY(20px); transition: transform 0.4s ease; }
+.gallery-item:hover .gallery-item-name { transform: translateY(0); }
+.gallery-item-action {
+  display: flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, 0.25);
+  padding: 8px 18px; border-radius: 99px; color: #fff; font-size: 13px; font-weight: 600;
+  font-family: 'Poppins', sans-serif; transform: translateY(20px); transition: transform 0.4s ease 0.1s;
+}
+.gallery-item:hover .gallery-item-action { transform: translateY(0); }
+
+.modal-links { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(168, 85, 247, 0.2); }
+.modal-link-btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px;
+  background: linear-gradient(135deg, #a855f7, #7c3aed); color: #fff; border: none;
+  border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1); text-decoration: none; font-family: 'Poppins', sans-serif;
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
+}
+.modal-link-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(168, 85, 247, 0.5); }
+.modal-link-btn.secondary { background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.4); color: #c084fc; box-shadow: none; }
+.modal-link-btn.secondary:hover { background: rgba(168, 85, 247, 0.2); color: #fff; border-color: #a855f7; box-shadow: 0 8px 20px rgba(168, 85, 247, 0.2); }
+
+/* UPDATED: Hero Image Frame Styles */
+.hero-image-wrapper {
+  position: relative; width: 280px; height: 380px; margin: 0 auto; z-index: 5;
+}
+@media (min-width: 768px) { .hero-image-wrapper { width: 340px; height: 460px; margin: 0; } }
+
+/* Floating geometric frame behind the image */
+.hero-image-wrapper::before {
+  content: ''; position: absolute; inset: 15px -15px -15px 15px;
+  border: 2px solid #a855f7; border-radius: 40px; z-index: 0;
+  opacity: 0.5; transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hero-image-wrapper::after {
+  content: ''; position: absolute; inset: -15px 15px 15px -15px;
+  border: 2px solid #ec4899; border-radius: 40px; z-index: 0;
+  opacity: 0.3; transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hero-image-wrapper:hover::before { inset: -5px; opacity: 1; transform: rotate(2deg); }
+.hero-image-wrapper:hover::after { inset: -5px; opacity: 0.8; transform: rotate(-2deg); }
+
+.hero-image-glow {
+  position: absolute; inset: -30px;
+  background: radial-gradient(circle at 50% 50%, rgba(168,85,247,0.4), rgba(236,72,153,0.2), transparent 70%);
+  filter: blur(40px); z-index: 0; animation: glow-breathe 4s ease-in-out infinite alternate;
+}
+@keyframes glow-breathe {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.hero-image-inner {
+  position: relative; width: 100%; height: 100%; z-index: 2;
+  border-radius: 40px; overflow: hidden; /* Sắc nét thay vì mask mờ */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.03);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(5px);
+}
+.hero-image-inner img {
+  width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hero-image-wrapper:hover .hero-image-inner img { transform: scale(1.1); }
+
+/* Project Cards */
+.project-card{transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s ease;text-decoration:none;display:block;color:inherit;perspective:1000px;transform-style:preserve-3d; border-radius: 24px;}
+.project-card:hover{transform:translateY(-10px) scale(1.02);box-shadow:0 25px 50px rgba(168,85,247,0.25); border-color: rgba(168,85,247,0.5);}
+.project-card .card-overlay{opacity:0;transition:opacity .4s ease; background: rgba(10,10,26,0.8); backdrop-filter: blur(4px);}
 .project-card:hover .card-overlay{opacity:1}
 
 /* CTA buttons */
 .btn-primary{
-  background:linear-gradient(135deg,#22c55e,#10b981);
-  padding:12px 28px;border-radius:99px;font-weight:600;color:#fff;
-  transition:all .3s ease;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,#a855f7,#ec4899,#7c3aed); background-size: 200% 200%;
+  padding:14px 32px;border-radius:99px;font-weight:600;color:#fff; font-size: 15px;
+  transition:all .4s ease;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:10px;
+  position: relative; overflow: hidden; font-family: 'Poppins', sans-serif;
+  box-shadow: 0 10px 30px rgba(168,85,247,0.3); animation: gradient-flow 5s ease infinite;
 }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(34,197,94,0.4)}
+.btn-primary::before {
+  content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.2);
+  border-radius: 99px; opacity: 0; transition: opacity 0.3s ease;
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(236,72,153,0.4); background-position: right center;}
+.btn-primary:active { transform: scale(0.95); }
+
 .btn-outline{
-  padding:12px 28px;border-radius:99px;font-weight:600;color:#d1fae5;
-  border:1.5px solid rgba(255,255,255,0.2);background:transparent;
-  transition:all .3s ease;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  padding:14px 32px;border-radius:99px;font-weight:600;color:#f0f4f8; font-size: 15px;
+  border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+  transition:all .4s cubic-bezier(0.22, 1, 0.36, 1);cursor:pointer;display:inline-flex;align-items:center;gap:10px;
+  font-family: 'Poppins', sans-serif;
 }
-.btn-outline:hover{border-color:#22c55e;background:rgba(34,197,94,0.1);transform:translateY(-2px)}
+.btn-outline:hover{border-color:#a855f7;background:rgba(168,85,247,0.15);transform:translateY(-3px); box-shadow: 0 10px 30px rgba(168,85,247,0.2); color: #fff;}
 
 /* Section reveal */
-.reveal-section{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
+.reveal-section{opacity:0;transform:translateY(50px);transition:opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)}
 .reveal-section.visible{opacity:1;transform:translateY(0)}
 
 /* Filter buttons */
-.filter-btn{padding:8px 20px;border-radius:99px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--text);cursor:pointer;transition:all .3s ease;font-family:'Outfit',sans-serif;font-size:14px}
-.filter-btn.active,.filter-btn:hover{background:linear-gradient(135deg,#22c55e,#10b981);border-color:transparent;color:#fff}
+.filter-btn{
+  padding:10px 24px;border-radius:99px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.02);
+  color:var(--text);cursor:pointer;transition:all .4s cubic-bezier(0.22, 1, 0.36, 1);font-family:'Poppins',sans-serif;font-size:14px; backdrop-filter: blur(10px);
+}
+.filter-btn.active,.filter-btn:hover{background:linear-gradient(135deg,#a855f7,#7c3aed);border-color:transparent;color:#fff; box-shadow: 0 8px 20px rgba(168,85,247,0.3); transform: translateY(-2px);}
 
 /* Input style */
 .form-input{
-  width:100%;padding:14px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);
-  background:rgba(255,255,255,0.04);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;
-  transition:border-color .3s ease,box-shadow .3s ease;outline:none;
+  width:100%;padding:16px 24px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.03);color:var(--text);font-family:'Poppins',sans-serif;font-size:15px;
+  transition:all .4s ease;outline:none; backdrop-filter: blur(10px);
 }
-.form-input:focus{border-color:#22c55e;box-shadow:0 0 20px rgba(34,197,94,0.15)}
+.form-input:focus{border-color:#a855f7;background:rgba(168,85,247,0.05);box-shadow:0 0 25px rgba(168,85,247,0.2); transform: translateY(-2px);}
 .form-input::placeholder{color:rgba(255,255,255,0.3)}
 
-/* Nav */
-.nav-link{position:relative;color:rgba(255,255,255,0.6);transition:color .3s ease}
-.nav-link:hover{color:#fff}
-.nav-link::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:linear-gradient(90deg,#22c55e,#10b981);transition:width .3s ease}
+/* NAV LINK STYLES (Floating Menu) */
+.nav-link{position:relative;color:rgba(255,255,255,0.7);transition:all .3s ease;font-family:'Poppins',sans-serif; font-weight: 500; padding: 6px 2px;}
+.nav-link:hover{color:#fff; text-shadow: 0 0 10px rgba(255,255,255,0.4);}
+.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:linear-gradient(90deg,#a855f7,#ec4899);transition:width .4s cubic-bezier(0.22, 1, 0.36, 1); border-radius: 2px; box-shadow: 0 0 10px rgba(168,85,247,0.8);}
 .nav-link:hover::after{width:100%}
 
 /* Scrollbar */
-.app-wrapper::-webkit-scrollbar{width:6px}
-.app-wrapper::-webkit-scrollbar-track{background:transparent}
-.app-wrapper::-webkit-scrollbar-thumb{background:rgba(168,85,247,0.3);border-radius:99px}
+.app-wrapper::-webkit-scrollbar{width:8px}
+.app-wrapper::-webkit-scrollbar-track{background:#0a0f1f}
+.app-wrapper::-webkit-scrollbar-thumb{background:rgba(168,85,247,0.4);border-radius:99px}
+.app-wrapper::-webkit-scrollbar-thumb:hover{background:rgba(168,85,247,0.8)}
 
 /* Stat card */
-.stat-card{text-align:center;padding:24px 16px}
-.stat-number{font-size:2rem;font-weight:800;background:linear-gradient(135deg,#ff6b6b,#ffa500);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-
-/* Circular progress */
-.circular-progress{position:relative;width:80px;height:80px}
-.circular-progress svg{transform:rotate(-90deg)}
-.circular-progress .progress-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.stat-card{text-align:center;padding:28px 20px; transition: transform 0.4s ease, box-shadow 0.4s ease;}
+.stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(168,85,247,0.2); border-color: rgba(168,85,247,0.4) !important; }
+.stat-number{font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Montserrat',sans-serif; line-height: 1.2;}
 
 /* Enhanced animations */
-@keyframes float-in {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
+@keyframes float-in { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes glow-rotate { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes float { 0%, 100% { transform: translateY(-10px); } 50% { transform: translateY(10px); } }
 
-@keyframes slide-right {
-  0% { opacity: 0; transform: translateX(-40px); }
-  100% { opacity: 1; transform: translateX(0); }
-}
+.float-animation { animation: float 4s ease-in-out infinite; }
 
-@keyframes glow-rotate {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(-10px); }
-  50% { transform: translateY(10px); }
-}
-
-@keyframes pulse-border {
-  0%, 100% { border-color: rgba(168,85,247,0.3); box-shadow: 0 0 20px rgba(168,85,247,0.1); }
-  50% { border-color: rgba(168,85,247,0.8); box-shadow: 0 0 40px rgba(168,85,247,0.3); }
-}
-
-.float-animation { animation: float 3s ease-in-out infinite; }
-.pulse-border-animation { animation: pulse-border 2.5s ease-in-out infinite; }
-
-@keyframes gradient-flow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes hero-name-flow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes hero-name-pulse {
-  0%, 100% { filter: drop-shadow(0 0 30px rgba(168,85,247,0.4)) drop-shadow(0 0 60px rgba(236,72,153,0.2)); }
-  50% { filter: drop-shadow(0 0 50px rgba(168,85,247,0.7)) drop-shadow(0 0 100px rgba(236,72,153,0.5)); }
-}
+@keyframes gradient-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes hero-name-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes hero-name-pulse { 0%, 100% { filter: drop-shadow(0 0 30px rgba(168,85,247,0.4)) drop-shadow(0 0 60px rgba(124,58,237,0.2)); } 50% { filter: drop-shadow(0 0 50px rgba(168,85,247,0.7)) drop-shadow(0 0 100px rgba(124,58,237,0.3)); } }
 
 /* Gradient text effect */
 .gradient-text {
-  background: linear-gradient(135deg,#22c55e,#10b981,#06b6d4,#22c55e);
+  background: linear-gradient(135deg,#a855f7,#ec4899,#7c3aed,#a855f7);
   background-size: 300% 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: glow-rotate 4s ease infinite;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: glow-rotate 5s ease infinite; font-family: 'Montserrat', sans-serif;
 }
 
 /* Neon border effect */
-.neon-card {
-  border: 2px solid rgba(34,197,94,0.3);
-  position: relative;
-  overflow: hidden;
-}
-
+.neon-card { border: 1px solid rgba(168,85,247,0.2); position: relative; overflow: hidden; }
 .neon-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg,transparent,rgba(34,197,94,0.2),transparent);
-  animation: slide 3s infinite;
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg,transparent,rgba(168,85,247,0.1),transparent);
+  animation: slide 4s infinite; pointer-events: none;
 }
-
-@keyframes slide {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
+@keyframes slide { 0% { transform: translateX(-100%) skewX(-15deg); } 100% { transform: translateX(200%) skewX(-15deg); } }
 
 /* Hover effects */
 .card-shine:hover::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  animation: shine 0.5s;
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  animation: shine 0.6s; pointer-events: none;
 }
-
-@keyframes shine {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-/* Animated background grid */
-.bg-grid {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    linear-gradient(0deg, transparent 24%, rgba(34,197,94,.1) 25%, rgba(34,197,94,.1) 26%, transparent 27%, transparent 74%, rgba(34,197,94,.1) 75%, rgba(34,197,94,.1) 76%, transparent 77%, transparent),
-    linear-gradient(90deg, transparent 24%, rgba(34,197,94,.1) 25%, rgba(34,197,94,.1) 26%, transparent 27%, transparent 74%, rgba(34,197,94,.1) 75%, rgba(34,197,94,.1) 76%, transparent 77%, transparent);
-  background-size: 50px 50px;
-  animation: grid-drift 20s linear infinite;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.3;
-}
-
-@keyframes grid-drift {
-  0% { transform: translateY(0) translateX(0); }
-  100% { transform: translateY(50px) translateX(50px); }
-}
-
-/* Floating particles */
-.particle {
-  position: fixed;
-  pointer-events: none;
-  z-index: 1;
-  border-radius: 50%;
-}
-
-.particle-1 { width: 8px; height: 8px; background: rgba(34,197,94,0.3); animation: float-particle 15s infinite ease-in-out; left: 10%; top: 20%; }
-.particle-2 { width: 6px; height: 6px; background: rgba(16,185,129,0.3); animation: float-particle 18s infinite ease-in-out 2s; left: 80%; top: 60%; }
-.particle-3 { width: 10px; height: 10px; background: rgba(6,182,212,0.2); animation: float-particle 20s infinite ease-in-out 4s; left: 20%; top: 80%; }
-.particle-4 { width: 7px; height: 7px; background: rgba(34,197,94,0.3); animation: float-particle 17s infinite ease-in-out 1s; left: 70%; top: 15%; }
-.particle-5 { width: 5px; height: 5px; background: rgba(16,185,129,0.25); animation: float-particle 19s infinite ease-in-out 3s; left: 40%; top: 90%; }
-
-@keyframes float-particle {
-  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
-  25% { transform: translateY(-50px) translateX(30px); opacity: 0.6; }
-  50% { transform: translateY(-100px) translateX(-30px); opacity: 0.3; }
-  75% { transform: translateY(-50px) translateX(50px); opacity: 0.5; }
-}
+@keyframes shine { 0% { transform: translateX(-100%) skewX(-15deg); } 100% { transform: translateX(200%) skewX(-15deg); } }
 
 /* Decorative elements */
-.accent-line {
-  height: 2px;
-  background: linear-gradient(90deg,#22c55e,#10b981,transparent);
-  margin: 16px 0;
-}
-
-/* Animated section divider */
-.section-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(34,197,94,0.5), transparent);
-  margin: 60px 0;
-  animation: pulse-line 3s ease-in-out infinite;
-}
-
-@keyframes pulse-line {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
-}
-
-/* Floating background shapes - animated */
-.float-shape {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.15;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.float-shape-1 {
-  width: 300px;
-  height: 300px;
-  background: #22c55e;
-  top: 10%;
-  left: 5%;
-  animation: float-shape-move 30s ease-in-out infinite;
-}
-
-.float-shape-2 {
-  width: 250px;
-  height: 250px;
-  background: #10b981;
-  top: 50%;
-  right: 10%;
-  animation: float-shape-move 40s ease-in-out infinite reverse;
-}
-
-.float-shape-3 {
-  width: 200px;
-  height: 200px;
-  background: #06b6d4;
-  bottom: 10%;
-  left: 30%;
-  animation: float-shape-move 35s ease-in-out infinite;
-}
-
-@keyframes float-shape-move {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(40px, -50px); }
-  50% { transform: translate(-30px, 60px); }
-  75% { transform: translate(50px, 30px); }
-}
-
-/* Text shimmer effect */
-.shimmer-text {
-  background: linear-gradient(90deg, #a855f7, #3b82f6, #a855f7);
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer 3s ease infinite;
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* Hologram effect */
-.hologram {
-  position: relative;
-  display: inline-block;
-}
-
-.hologram::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(45deg, #a855f7, #3b82f6, #06b6d4, #a855f7);
-  background-size: 300% 300%;
-  border-radius: inherit;
-  animation: hologram-glow 4s ease infinite;
-  opacity: 0.5;
-  z-index: -1;
-}
-
-@keyframes hologram-glow {
-  0% { background-position: 0% 50%; filter: blur(8px); opacity: 0.3; }
-  50% { background-position: 100% 50%; filter: blur(12px); opacity: 0.7; }
-  100% { background-position: 0% 50%; filter: blur(8px); opacity: 0.3; }
-}
-
-/* Magnetic hover effect */
-.magnetic-item {
-  position: relative;
-  cursor: pointer;
-}
-
-/* Particle burst effect */
-@keyframes particle-burst {
-  0% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(var(--tx), var(--ty)) scale(0);
-  }
-}
-
-.particle-burst {
-  position: fixed;
-  pointer-events: none;
-  z-index: 999;
-  animation: particle-burst 0.8s ease-out forwards;
-  box-shadow: 0 0 15px rgba(168,85,247,0.8);
-}
-
-/* Staggered entrance */
-.stagger-enter {
-  animation: stagger-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  opacity: 0;
-}
-
-@keyframes stagger-in {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Project card entrance */
-.project-card {
-  animation: card-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-@keyframes card-pop {
-  0% {
-    opacity: 0;
-    transform: scale(0.85) translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-/* Smooth section transitions */
-.section-fade-in {
-  animation: fade-in-section 0.8s ease-out forwards;
-}
-
-@keyframes fade-in-section {
-  0% {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Smooth skill bar fill */
-.skill-bar-enhanced .fill {
-  transition: width 1.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Enhanced button interaction */
-.btn-primary, .btn-outline {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary::after, .btn-outline::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
-.btn-primary:active::after, .btn-outline:active::after {
-  animation: ripple 0.6s ease-out;
-}
-
-@keyframes ripple {
-  0% {
-    width: 0;
-    height: 0;
-    opacity: 1;
-  }
-  100% {
-    width: 300px;
-    height: 300px;
-    opacity: 0;
-  }
-}
-
-/* Input focus glow */
-.form-input {
-  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.form-input:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(168,85,247,0.2), inset 0 0 20px rgba(168,85,247,0.05);
-}
-
-/* Smooth stat number animation */
-@keyframes stat-count {
-  0% { opacity: 0; transform: scale(0.5); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.stat-number {
-  animation: stat-count 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Timeline item entrance */
-.timeline-item {
-  opacity: 0;
-  animation: timeline-slide 0.6s ease-out forwards;
-}
-
-@keyframes timeline-slide {
-  0% {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Experience card hover effect */
-.exp-card {
-  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.exp-card:hover {
-  transform: translateX(8px);
-  box-shadow: 0 20px 60px rgba(168,85,247,0.2);
-}
-
-/* Contact info hover pulse */
-.contact-item {
-  transition: all 0.3s ease;
-}
-
-.contact-item:hover {
-  transform: translateX(4px);
-}
-
-.contact-item:hover .contact-icon {
-  animation: icon-pulse 0.4s ease-out;
-}
-
-@keyframes icon-pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-/* Smooth nav underline */
-.nav-link::after {
-  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Filter button transition */
-.filter-btn {
-  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.filter-btn:hover {
-  transform: translateY(-2px);
-}
-
-.filter-btn.active {
-  animation: btn-activate 0.4s ease-out;
-}
-
-@keyframes btn-activate {
-  0% {
-    transform: scale(0.95);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Smooth scrollbar animation */
-.app-wrapper::-webkit-scrollbar-thumb {
-  transition: background 0.3s ease;
-}
-
-.app-wrapper::-webkit-scrollbar-thumb:hover {
-  background: rgba(168,85,247,0.5);
-}
-
-/* Cyberpunk scan lines */
-.scanline {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(168,85,247,0.5), transparent);
-  animation: scan 8s linear infinite;
-  pointer-events: none;
-  z-index: 2;
-}
-
-@keyframes scan {
-  0% { top: 0%; }
-  100% { top: 100%; }
-}
-
-/* Neon text glow */
-.neon-text {
-  text-shadow: none;
-}
-
-@keyframes neon-flicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-    text-shadow: none;
-  }
-  20%, 24%, 55% {
-    text-shadow: none;
-  }
-}
-
-/* Liquid morphing shape */
-.liquid-shape {
-  position: fixed;
-  filter: blur(50px);
-  opacity: 0.2;
-  pointer-events: none;
-  z-index: 0;
-  mix-blend-mode: screen;
-}
-
-.liquid-1 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle at 30% 40%, #a855f7 0%, transparent 60%);
-  top: 5%;
-  left: 0%;
-  animation: liquid-morph-1 15s ease-in-out infinite;
-}
-
-.liquid-2 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle at 70% 60%, #3b82f6 0%, transparent 60%);
-  bottom: 5%;
-  right: 5%;
-  animation: liquid-morph-2 18s ease-in-out infinite;
-}
-
-.liquid-3 {
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle at 50% 50%, #06b6d4 0%, transparent 60%);
-  top: 40%;
-  left: 40%;
-  animation: liquid-morph-3 20s ease-in-out infinite;
-}
-
-@keyframes liquid-morph-1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(50px, -80px) scale(1.1); }
-  50% { transform: translate(-40px, 60px) scale(0.95); }
-  75% { transform: translate(80px, 40px) scale(1.05); }
-}
-
-@keyframes liquid-morph-2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(-60px, 70px) scale(1.05); }
-  50% { transform: translate(50px, -50px) scale(0.98); }
-  75% { transform: translate(-50px, -60px) scale(1.02); }
-}
-
-@keyframes liquid-morph-3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(60px, 50px) scale(0.9); }
-  50% { transform: translate(-50px, -70px) scale(1.1); }
-  75% { transform: translate(40px, -30px) scale(0.95); }
-}
-
-/* Radial energy pulse */
-.energy-pulse {
-  position: fixed;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(168,85,247,0.4) 0%, rgba(168,85,247,0) 70%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.pulse-ripple {
-  position: absolute;
-  border-radius: 50%;
-  border: 2px solid #a855f7;
-  animation: energy-ripple 1.5s ease-out forwards;
-}
-
-@keyframes energy-ripple {
-  0% {
-    width: 0;
-    height: 0;
-    opacity: 1;
-  }
-  100% {
-    width: 200px;
-    height: 200px;
-    opacity: 0;
-  }
-}
-
-/* Star field background */
-.star-field {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.star {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  background: white;
-  border-radius: 50%;
-  animation: twinkle 3s infinite;
-}
-
-@keyframes twinkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
-}
-
-/* Glitch effect */
-.glitch-text {
-  position: relative;
-  display: inline-block;
-  animation: glitch-anim 2s infinite;
-}
-
-.glitch-text::before,
-.glitch-text::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.glitch-text::before {
-  animation: glitch-1 0.3s infinite;
-  color: #a855f7;
-  z-index: -1;
-}
-
-.glitch-text::after {
-  animation: glitch-2 0.3s infinite;
-  color: #3b82f6;
-  z-index: -2;
-}
-
-@keyframes glitch-anim {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-  100% { transform: translate(0); }
-}
-
-@keyframes glitch-1 {
-  0% { clip-path: inset(0 0 0 0); }
-  20% { clip-path: inset(0 0 65% 0); }
-  40% { clip-path: inset(28% 0 58% 0); }
-  60% { clip-path: inset(54% 0 7% 0); }
-  80% { clip-path: inset(63% 0 10% 0); }
-  100% { clip-path: inset(0 0 0 0); }
-}
-
-@keyframes glitch-2 {
-  0% { clip-path: inset(0 0 0 0); }
-  20% { clip-path: inset(0 0 0 40%); }
-  40% { clip-path: inset(37% 0 58% 0); }
-  60% { clip-path: inset(3% 0 58% 0); }
-  80% { clip-path: inset(22% 0 77% 0); }
-  100% { clip-path: inset(0 0 0 0); }
-}
-
-/* Orb interaction */
-.interactive-orb {
-  position: fixed;
-  pointer-events: none;
-  z-index: 1;
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle at 30% 30%, rgba(168,85,247,0.8), rgba(59,130,246,0.2));
-  border-radius: 50%;
-  box-shadow: 0 0 60px rgba(168,85,247,0.6), inset -2px -2px 5px rgba(0,0,0,0.5);
-  filter: blur(1px);
-}
-
-/* Cyber grid effect */
-.cyber-grid {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    linear-gradient(0deg, transparent 24%, rgba(168,85,247,0.05) 25%, rgba(168,85,247,0.05) 26%, transparent 27%, transparent 74%, rgba(168,85,247,0.05) 75%, rgba(168,85,247,0.05) 76%, transparent 77%, transparent),
-    linear-gradient(90deg, transparent 24%, rgba(168,85,247,0.05) 25%, rgba(168,85,247,0.05) 26%, transparent 27%, transparent 74%, rgba(168,85,247,0.05) 75%, rgba(168,85,247,0.05) 76%, transparent 77%, transparent);
-  background-size: 100px 100px;
-  animation: grid-perspective 20s linear infinite;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.4;
-  perspective: 1000px;
-}
-
-@keyframes grid-perspective {
-  0% {
-    background-position: 0 0;
-    transform: perspective(1000px) rotateX(0deg);
-  }
-  50% {
-    transform: perspective(1000px) rotateX(2deg);
-  }
-  100% {
-    background-position: 0 100px;
-    transform: perspective(1000px) rotateX(0deg);
-  }
-}
-
-/* Aurora borealis effect */
-.aurora {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.aurora::before {
-  content: '';
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(90deg,
-    transparent,
-    rgba(168,85,247,0.1) 20%,
-    rgba(99,102,241,0.1) 40%,
-    rgba(59,130,246,0.1) 50%,
-    rgba(6,182,212,0.1) 60%,
-    rgba(99,102,241,0.1) 80%,
-    transparent
-  );
-  animation: aurora-wave 8s ease-in-out infinite;
-  transform: skewY(-10deg);
-}
-
-@keyframes aurora-wave {
-  0%, 100% {
-    transform: skewY(-10deg) translateX(-10%);
-  }
-  50% {
-    transform: skewY(-10deg) translateX(10%);
-  }
-}
-
-/* Hover glow effect */
-.glow-hover {
-  transition: all 0.3s ease;
-}
-
-.glow-hover:hover {
-  box-shadow: 0 0 30px rgba(168,85,247,0.4), inset 0 0 30px rgba(168,85,247,0.1);
-}
-
-/* Animated gradient border */
-.gradient-border {
-  position: relative;
-  background: linear-gradient(var(--bg), var(--bg)) padding-box;
-  border: 2px solid transparent;
-  border-image: linear-gradient(135deg, #a855f7, #3b82f6, #06b6d4) 1;
-  animation: gradient-shift 4s ease infinite;
-}
-
-@keyframes gradient-shift {
-  0%, 100% { border-image-source: linear-gradient(135deg, #a855f7, #3b82f6, #06b6d4); }
-  50% { border-image-source: linear-gradient(135deg, #3b82f6, #06b6d4, #a855f7); }
-}
-
-.skill-bar-enhanced {
-  position: relative;
-  height: 10px;
-  border-radius: 99px;
-  background: rgba(255,255,255,0.08);
-  overflow: hidden;
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
-}
-
-.skill-bar-enhanced .fill {
-  height: 100%;
-  border-radius: 99px;
-  background: linear-gradient(90deg,#a855f7,#ec4899,#3b82f6);
-  box-shadow: 0 0 25px rgba(168,85,247,0.8), 0 0 40px rgba(236,72,153,0.5);
-  transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+.accent-line { height: 3px; background: linear-gradient(90deg,#a855f7,#ec4899,transparent); margin: 16px 0; border-radius: 3px; }
 
 /* Icon animation */
-.icon-bounce {
-  display: inline-block;
-  animation: bounce 2s ease-in-out infinite;
-}
+.icon-bounce { display: inline-block; animation: bounce 2s ease-in-out infinite; }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
+/* Headings - Font artistic */
+h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', 'Playfair Display', sans-serif; letter-spacing: 0.02em; }
+#heroName { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: 0.06em; }
+section h2 { font-family: 'Montserrat', sans-serif; letter-spacing: 0.04em; }
+#heroSubtitle { font-family: 'Poppins', sans-serif; font-weight: 600; letter-spacing: 0.05em; }
 
-/* Card entrance animation */
-.card-enter {
-  animation: float-in 0.6s ease-out forwards;
-}
-
-.reveal-section {
-  opacity: 0;
-  transform: translateY(60px);
-  transition: opacity 1s ease, transform 1s ease;
-}
-
-.reveal-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Project card click pulse */
-@keyframes pulse-click {
-  0% {
-    opacity: 1;
-    transform: scale(0.95);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.2);
-  }
-}
-
-/* Card bounce effect */
-@keyframes card-bounce {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  25% {
-    transform: translateY(-12px) scale(1.02);
-  }
-  50% {
-    transform: translateY(-20px) scale(1.05);
-  }
-  75% {
-    transform: translateY(-8px) scale(1.02);
-  }
-  100% {
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Button bounce effect */
-@keyframes button-bounce {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  25% {
-    transform: translateY(-10px) scale(1.02);
-  }
-  50% {
-    transform: translateY(-15px) scale(1.05);
-  }
-  75% {
-    transform: translateY(-5px) scale(1.02);
-  }
-  100% {
-    transform: translateY(0) scale(1);
-  }
-}
-
-.btn-bounce {
-  animation: button-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
   </style>
-  <style>body { box-sizing: border-box; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full"><!-- Animated background layer -->
+ <body class="h-full">
+  <div id="loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <div class="loader-text">WELCOME TO MY PORTFOLIO</div>
+    </div>
+  </div>
+
+  <div class="bg-grain"></div>
+  
   <div class="bg-grid"></div>
-  <div class="float-shape float-shape-1"></div>
-  <div class="float-shape float-shape-2"></div>
-  <div class="float-shape float-shape-3"></div><!-- Floating particles -->
-  <div class="particle particle-1"></div>
-  <div class="particle particle-2"></div>
-  <div class="particle particle-3"></div>
-  <div class="particle particle-4"></div>
-  <div class="particle particle-5"></div><!-- Scanline effect -->
-  <div class="scanline"></div><!-- Liquid morphing shapes -->
-  <div class="liquid-shape liquid-1"></div>
-  <div class="liquid-shape liquid-2"></div>
-  <div class="liquid-shape liquid-3"></div><!-- Aurora effect -->
-  <div class="aurora"></div><!-- Cyber grid -->
-  <div class="cyber-grid"></div>
-  <div class="app-wrapper" id="appWrapper"><!-- NAV -->
-   <nav class="fixed top-0 left-0 right-0 z-50" style="background:rgba(10,10,26,0.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.05)">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between"><a href="#hero" class="font-bold text-lg" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#3b82f6);padding:2px;overflow:hidden"><img src="https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-6/671174672_122191325558766968_2146783314959942852_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=101&ccb=1-7&_nc_sid=13d280&_nc_eui2=AeGFpUzT2puWiTwXaLXSvC-aAnqFqWIjowsCeoWpYiOjC0fPJ0GMS3lF_pkn-BsuCPMwlwTqT9-VSLvnthpfjhrR&_nc_ohc=Ob7KY5trBp4Q7kNvwETZq61&_nc_oc=AdpHV2z6s0K0Vo_okHLMVf7gsk57wksX0iJrAWBpMR5DOSKuGlwvuNwoXZa3Rv5Qydk&_nc_zt=23&_nc_ht=scontent.fhan3-3.fna&_nc_gid=KeJnOegSuCG-yXOQZ9ED4A&_nc_ss=7a3a8&oh=00_Af3AC3eFw4iK74J0pkExbIj39TEh5gqtF45P7QJV45aSEw&oe=69E6E6B0" alt="Logo" style="width:100%;height:100%;border-radius:50%;object-fit:cover;background:#0a0a1a" loading="lazy" onerror="console.error('Logo failed to load:', this.src); this.style.display='none'; this.parentElement.innerHTML='HP.'; this.parentElement.style.background='linear-gradient(135deg,#a855f7,#3b82f6)'; this.parentElement.style.webkitBackgroundClip='text'; this.parentElement.style.webkitTextFillColor='transparent'; this.parentElement.style.display='flex'; this.parentElement.style.alignItems='center'; this.parentElement.style.justifyContent='center'; this.parentElement.style.fontSize='14px'; this.parentElement.style.fontWeight='bold'"></a>
-     <div class="hidden md:flex gap-8 text-sm"><a href="#hero" class="nav-link">Trang chủ</a> <a href="#about" class="nav-link">Về tôi</a> <a href="#projects" class="nav-link">Dự án</a> <a href="#skills" class="nav-link">Kỹ năng</a> <a href="#experience" class="nav-link">Kinh nghiệm</a> <a href="#contact" class="nav-link">Liên hệ</a>
-     </div><button id="mobileMenuBtn" class="md:hidden text-white" aria-label="Menu"><i data-lucide="menu" style="width:24px;height:24px"></i></button>
-    </div><!-- Mobile menu -->
-    <div id="mobileMenu" class="hidden md:hidden px-6 pb-4 flex flex-col gap-3 text-sm"><a href="#hero" class="nav-link py-2">Trang chủ</a> <a href="#about" class="nav-link py-2">Về tôi</a> <a href="#projects" class="nav-link py-2">Dự án</a> <a href="#skills" class="nav-link py-2">Kỹ năng</a> <a href="#experience" class="nav-link py-2">Kinh nghiệm</a> <a href="#contact" class="nav-link py-2">Liên hệ</a>
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+  <div class="ambient-orb orb-3"></div>
+  
+  <div class="aurora-container">
+    <div class="aurora-top"></div>
+    <div class="aurora-bottom"></div>
+  </div>
+  <div class="shooting-star star-1"></div>
+  <div class="shooting-star star-2"></div>
+  <div class="shooting-star star-3"></div>
+
+  <div id="stars-container" style="position:fixed; inset:0; pointer-events:none; z-index:2;"></div>
+
+  <div class="glass-shape shape-circle"></div>
+  <div class="glass-shape shape-square"></div>
+  <div class="glass-shape shape-ring"></div>
+  <div class="glass-shape shape-cross"></div>
+
+  <div class="modal-overlay" id="projectModal">
+    <button class="modal-close" id="modalClose">
+      <i data-lucide="x" style="width:24px;height:24px"></i>
+    </button>
+    <div class="modal-content">
+      <div class="modal-header" id="modalHeader">
+        <div class="modal-header-emoji" id="modalEmoji">🎨</div>
+      </div>
+      <div class="modal-body">
+        <span class="modal-category" id="modalCategory">Design</span>
+        <h2 class="modal-title" id="modalTitle">Tên dự án</h2>
+        <p class="modal-description" id="modalDescription">Mô tả dự án</p>
+
+        <div class="modal-section">
+          <div class="modal-section-title">
+            <i data-lucide="target" style="width:20px;height:20px"></i>
+            <span id="modalSectionHeadline">Mục tiêu & Kết quả</span>
+          </div>
+          <p style="color: rgba(255, 255, 255, 0.7); line-height: 1.7; font-family: 'Poppins', sans-serif; font-size: 15px;" id="modalObjective">
+            Chi tiết về mục tiêu và kết quả của dự án
+          </p>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-title">
+            <i data-lucide="palette" style="width:20px;height:20px"></i>
+            <span id="modalToolsHeadline">Công cụ & Kỹ thuật</span>
+          </div>
+          <div class="modal-features" id="modalTools"></div>
+        </div>
+
+        <div class="modal-section" id="modalGallerySection">
+          <div class="modal-section-title">
+            <i data-lucide="image" style="width:20px;height:20px"></i>
+            Các dự án liên quan
+          </div>
+          <div class="gallery-container" id="modalGallery"></div>
+        </div>
+
+        <div class="modal-links" id="modalLinks"></div>
+      </div>
     </div>
-   </nav><!-- HERO -->
-   <section id="hero" class="relative min-h-screen flex items-center justify-center text-center px-6" style="padding-top:80px">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-    <div class="relative z-10 max-w-2xl mx-auto">
-     <div class="avatar-glow mx-auto mb-8">
-      <div class="avatar-inner" style="overflow:hidden;">
-  <!-- ảnh đại diện -->
-  <img src="https://scontent.fsgn5-7.fna.fbcdn.net/v/t39.30808-6/486419229_122118718922766968_5517283650790658580_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeFZhYXDVR2rdSSwYZ-zxLpjJmB-OMsIcBEmYH44ywhwEYo4c0ZVoyBv-i4ZHXflHlg6l7-8Q5wYxiEcb7KZdIVW&_nc_ohc=GKD2cj1MUP0Q7kNvwGWwWFb&_nc_oc=AdppUERDyQXnrFYdn3scy2FeoCnutaXglfJf_gJkmNOSx5WF7Vato-mweh2CZZ9uqR9LpzaTo1YhQTjxciRfp08V&_nc_zt=23&_nc_ht=scontent.fsgn5-7.fna&_nc_gid=3tRslaB0kA2JH_daMdnRUg&_nc_ss=7a3a8&oh=00_Af0b0faQZ0KYxQI6fVqDN7zD868hWpJltYBX6xTalawSwg&oe=69E70D25" 
-       alt="Nguyễn Trần Hoàng Phúc" 
-       style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+  </div>
+  
+  <div class="app-wrapper" id="appWrapper">
+    
+    <nav class="fixed top-5 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-[92%] max-w-6xl z-50 transition-all duration-300 rounded-[24px] md:rounded-full bg-[#0a0a1a]/70 backdrop-blur-2xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+      <div class="px-4 py-3 md:px-8 md:py-3 flex items-center justify-between">
+        
+        <a href="#hero" class="relative group flex items-center justify-center w-[48px] h-[48px] rounded-[14px] bg-gradient-to-br from-purple-500 to-pink-500 p-[2px] z-10 transition-transform duration-300 hover:scale-110 shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+          <div class="absolute inset-0 rounded-[14px] bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 blur-[12px] transition-all duration-300"></div>
+          <img src="https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-6/671174672_122191325558766968_2146783314959942852_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=101&ccb=1-7&_nc_sid=13d280&_nc_eui2=AeGFpUzT2puWiTwXaLXSvC-aAnqFqWIjowsCeoWpYiOjC0fPJ0GMS3lF_pkn-BsuCPMwlwTqT9-VSLvnthpfjhrR&_nc_ohc=Ob7KY5trBp4Q7kNvwETZq61&_nc_oc=AdpHV2z6s0K0Vo_okHLMVf7gsk57wksX0iJrAWBpMR5DOSKuGlwvuNwoXZa3Rv5Qydk&_nc_zt=23&_nc_ht=scontent.fhan3-3.fna&_nc_gid=KeJnOegSuCG-yXOQZ9ED4A&_nc_ss=7a3a8&oh=00_Af3AC3eFw4iK74J0pkExbIj39TEh5gqtF45P7QJV45aSEw&oe=69E6E6B0" alt="Logo" class="w-full h-full rounded-[12px] object-cover relative z-10" loading="lazy">
+        </a>
+        
+       <div class="hidden md:flex gap-8 text-[15px]">
+         <a href="#hero" class="nav-link">Trang chủ</a> 
+         <a href="#about" class="nav-link">Về tôi</a> 
+         <a href="#education" class="nav-link">Học vấn</a>
+         <a href="#skills" class="nav-link">Kỹ năng</a> 
+         <a href="#experience" class="nav-link">Kinh nghiệm</a> 
+         <a href="#projects" class="nav-link">Dự án</a> 
+         <a href="#contact" class="nav-link">Liên hệ</a>
+       </div>
+       <button id="mobileMenuBtn" class="md:hidden text-white hover:text-pink-400 transition-colors" aria-label="Menu"><i data-lucide="menu" style="width:28px;height:28px"></i></button>
+      </div>
+      
+      <div id="mobileMenu" class="hidden md:hidden absolute top-[110%] left-0 right-0 p-6 flex-col gap-4 text-[15px] bg-[#0a0a1a]/95 backdrop-blur-2xl rounded-[24px] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+        <a href="#hero" class="nav-link py-2 inline-block">Trang chủ</a> 
+        <a href="#about" class="nav-link py-2 inline-block">Về tôi</a> 
+        <a href="#education" class="nav-link py-2 inline-block">Học vấn</a> 
+        <a href="#skills" class="nav-link py-2 inline-block">Kỹ năng</a> 
+        <a href="#experience" class="nav-link py-2 inline-block">Kinh nghiệm</a> 
+        <a href="#projects" class="nav-link py-2 inline-block">Dự án</a> 
+        <a href="#contact" class="nav-link py-2 inline-block">Liên hệ</a>
+      </div>
+    </nav>
+
+   <section id="hero" class="relative min-h-screen flex items-center justify-center px-6" style="padding-top:100px">
+    <div class="relative z-10 max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-12 md:gap-8 w-full">
+     
+     <div class="flex-1 text-center md:text-left md:pr-8">
+       <h1 id="heroName" class="text-4xl md:text-[4rem] font-900 mb-5" style="line-height:1.15;text-transform:uppercase;background:linear-gradient(90deg,#a855f7 0%,#ec4899 25%,#6d28d9 50%,#ec4899 75%,#a855f7 100%);background-size:400% 400%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:hero-name-flow 6s ease infinite,hero-name-pulse 3s ease-in-out infinite;text-shadow:0 0 40px rgba(168,85,247,0.4),0 0 80px rgba(236,72,153,0.2);">
+         <br>Nguyễn Trần<br>Hoàng Phúc
+       </h1>
+       <p id="heroSubtitle" class="text-xl md:text-2xl mb-6" style="background:linear-gradient(90deg,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;">PR Student · Designer · Content Creator</p>
+       <p id="heroDesc" class="text-[16px] mb-10 leading-relaxed text-gray-400 max-w-lg mx-auto md:mx-0" style="font-family:'Poppins',sans-serif">Xin chào, Tôi là người năng động, tỉ mỉ, sáng tạo, có trách nhiệm và luôn muốn mang lại năng lượng tích cực, truyền cảm hứng cho mọi người.</p>
+       <div class="flex flex-wrap justify-center md:justify-start gap-5">
+          <a href="#projects" class="btn-primary"><i data-lucide="eye" style="width:20px;height:20px"></i> Xem dự án</a> 
+          <a href="#contact" class="btn-outline"><i data-lucide="mail" style="width:20px;height:20px"></i> Liên hệ</a>
+       </div>
+     </div>
+
+     <div class="flex-1 flex justify-center md:justify-end w-full mb-10 md:mb-0">
+       <div class="hero-image-wrapper">
+        <div class="hero-image-glow"></div>
+        <div class="hero-image-inner">
+          <img src="https://scontent.fsgn5-7.fna.fbcdn.net/v/t39.30808-6/683174677_122193062066766968_622138835899588796_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeERoDeUZkLheAT1bDhlnwKt7J14GbhFrIHsnXgZuEWsgeOtQ92vo1VEoniEV8py5shUFZC12FMmezGGrq_r1mKm&_nc_ohc=gTRa7MKbfPkQ7kNvwHmGW-A&_nc_oc=AdqsS3LgtZ_b_Mwm97kstDUT1KBPVK4YlEzvif6j0PvyxIqOxat9WeeBsWTJZ94vpohG-HQCNknZiIKiRdmXuk02&_nc_zt=23&_nc_ht=scontent.fsgn5-7.fna&_nc_gid=BTaYXWTxiUEJfL9FEUlRzA&_nc_ss=7b2a8&oh=00_Af2D0kCiI4Hg7xCFEZs82qDyIWFmH-lgtAbg0uoxcKMUvw&oe=69F481FA" 
+               alt="Nguyễn Trần Hoàng Phúc">
+        </div>
+       </div>
+     </div>
+    </div>
+   </section>
+   
+   <section id="about" class="reveal-section py-24 px-6 relative">
+    <div class="max-w-6xl mx-auto relative z-10">
+     <div class="text-center mb-16">
+       <h2 class="text-3xl md:text-4xl font-800" style="font-family:'Montserrat',sans-serif">VỀ <span class="gradient-text">TÔI</span></h2>
+       <p class="mt-3 text-[15px] text-gray-400 font-medium" style="font-family:'Poppins',sans-serif">Khám phá hành trình và đam mê của mình</p>
+     </div>
+     
+     <div class="grid md:grid-cols-2 gap-16 items-center">
+      <div class="relative group cursor-pointer" onclick="changeAboutImage()">
+        <div class="glass p-2 neon-card card-shine rounded-[24px] relative z-10" style="background: rgba(255,255,255,0.02);">
+          <img id="aboutImage" src="https://scontent.fsgn5-7.fna.fbcdn.net/v/t39.30808-6/486419229_122118718922766968_5517283650790658580_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeFZhYXDVR2rdSSwYZ-zxLpjJmB-OMsIcBEmYH44ywhwEYo4c0ZVoyBv-i4ZHXflHlg6l7-8Q5wYxiEcb7KZdIVW&_nc_ohc=GKD2cj1MUP0Q7kNvwGWwWFb&_nc_oc=AdppUERDyQXnrFYdn3scy2FeoCnutaXglfJf_gJkmNOSx5WF7Vato-mweh2CZZ9uqR9LpzaTo1YhQTjxciRfp08V&_nc_zt=23&_nc_ht=scontent.fsgn5-7.fna&_nc_gid=3tRslaB0kA2JH_daMdnRUg&_nc_ss=7a3a8&oh=00_Af0b0faQZ0KYxQI6fVqDN7zD868hWpJltYBX6xTalawSwg&oe=69E70D25"
+               alt="Nguyễn Trần Hoàng Phúc"
+               class="w-full h-auto aspect-[4/5] object-cover rounded-[18px] shadow-2xl transition-opacity duration-300"
+               style="animation: float 6s ease-in-out infinite;">
+               
+          <div class="absolute inset-0 m-2 rounded-[18px] bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none" style="animation: float 6s ease-in-out infinite;">
+            <span class="text-white text-[15px] font-medium px-5 py-3 rounded-full bg-black/50 backdrop-blur-md flex items-center gap-2 border border-white/10 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
+              <i data-lucide="refresh-cw" style="width:18px;height:18px"></i> Nhấn để xem thêm ảnh
+            </span>
+          </div>
+        </div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-tr from-[#a855f7] to-[#ec4899] opacity-20 blur-[90px] rounded-full z-0 pointer-events-none"></div>
+      </div>
+
+      <div class="flex flex-col justify-center" style="font-family:'Poppins',sans-serif">
+        <div class="mb-8">
+          <h3 class="text-2xl md:text-3xl font-bold mb-4 text-white" style="font-family:'Montserrat',sans-serif">Nguyễn Trần Hoàng Phúc</h3>
+          <div class="accent-line w-24 mb-6"></div>
+          <p id="aboutText" class="text-[15px] leading-relaxed mb-6 text-gray-300">Mình là Hoàng Phúc — sinh viên ngành Quan hệ Công chúng với niềm đam mê thiết kế và sáng tạo nội dung. Mình tin rằng mỗi thiết kế đều kể một câu chuyện, và mỗi chiến dịch truyền thông đều có sức mạnh thay đổi cách mọi người nhìn nhận thế giới.</p>
+          <p class="text-[15px] leading-relaxed mb-8 text-gray-300">Với tư duy sáng tạo, khả năng làm việc nhóm và tinh thần học hỏi không ngừng, mình luôn tìm kiếm những cơ hội để phát triển bản thân và tạo ra giá trị.</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-5 w-full mb-8">
+          <div class="stat-card glass flex flex-col justify-center items-start group rounded-[20px]">
+            <div class="stat-number">30+</div>
+            <div class="text-[14px] mt-2 font-medium text-gray-400 group-hover:text-purple-300 transition-colors">Dự án thiết kế</div>
+          </div>
+          <div class="stat-card glass flex flex-col justify-center items-start group rounded-[20px]">
+            <div class="stat-number">3+</div>
+            <div class="text-[14px] mt-2 font-medium text-gray-400 group-hover:text-pink-300 transition-colors">Dự án sự kiện</div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-3 mt-2">
+          <span class="glass px-5 py-2.5 text-[14px] font-medium neon-card hover:bg-purple-500/10 transition-colors" style="color:#d8b4fe;border-radius:14px;">🎨 Design</span>
+          <span class="glass px-5 py-2.5 text-[14px] font-medium neon-card hover:bg-blue-500/10 transition-colors" style="color:#93c5fd;border-radius:14px;">📢 PR</span>
+          <span class="glass px-5 py-2.5 text-[14px] font-medium neon-card hover:bg-pink-500/10 transition-colors" style="color:#f9a8d4;border-radius:14px;">✍️ Content</span>
+          <span class="glass px-5 py-2.5 text-[14px] font-medium neon-card hover:bg-indigo-500/10 transition-colors" style="color:#a5b4fc;border-radius:14px;">📷 Media</span>
+        </div>
+      </div>
+     </div>
+    </div>
+   </section>
+
+   <section id="education" class="reveal-section py-24 px-6 relative">
+    <div class="max-w-6xl mx-auto relative z-10">
+     <div class="text-center mb-16">
+       <h2 class="text-3xl md:text-4xl font-800" style="font-family:'Montserrat',sans-serif">HỌC VẤN & <span class="gradient-text">CHỨNG CHỈ</span></h2>
+       <p class="mt-3 text-[15px] text-gray-400 font-medium" style="font-family:'Poppins',sans-serif">Nền tảng kiến thức và sự phát triển bản thân</p>
+     </div>
+     
+     <div class="grid md:grid-cols-2 gap-10">
+       <div class="glass p-10 neon-card group hover:border-purple-500/40" style="border-radius: 24px; transition: all 0.4s;">
+         <h3 class="text-xl font-800 mb-8 flex items-center gap-3 text-purple-400" style="font-family:'Montserrat',sans-serif"><i data-lucide="graduation-cap" class="w-7 h-7"></i> Bằng cấp</h3>
+         
+         <div class="relative pl-8 border-l-2 border-purple-500/30 space-y-8">
+    <div class="relative">
+      <div class="absolute w-4 h-4 rounded-full bg-purple-500 -left-[41px] top-1 shadow-[0_0_15px_#a855f7] group-hover:scale-125 transition-transform"></div>
+      <div class="text-[14px] text-purple-400 font-semibold mb-2 uppercase tracking-wider" style="font-family:'Poppins',sans-serif">Hiện tại</div>
+      <h4 class="text-[18px] font-bold text-white mb-2 leading-snug" style="font-family:'Montserrat',sans-serif">Sinh viên ngành Quan hệ Công chúng</h4>
+      <p class="text-[15px] text-gray-400 font-medium flex items-center gap-2" style="font-family:'Poppins',sans-serif">
+        <i data-lucide="building-2" class="w-4 h-4 text-purple-400"></i> Đại học Công nghệ TP.HCM (HUTECH)
+      </p>
+    </div>
+
+    <div class="relative">
+      <div class="absolute w-4 h-4 rounded-full bg-purple-500 -left-[41px] top-1 shadow-[0_0_15px_#a855f7] group-hover:scale-125 transition-transform"></div>
+      <div class="text-[14px] text-purple-400 font-semibold mb-2 uppercase tracking-wider" style="font-family:'Poppins',sans-serif">2022 - 2025</div>
+      <h4 class="text-[18px] font-bold text-white mb-2 leading-snug" style="font-family:'Montserrat',sans-serif">Lớp A12</h4>
+      <p class="text-[15px] text-gray-400 font-medium flex items-center gap-2" style="font-family:'Poppins',sans-serif">
+        <i data-lucide="building-2" class="w-4 h-4 text-purple-400"></i> Trường THPT Cái Bè
+      </p>
+    </div>
+  </div>
 </div>
-     </div>
-     <h1 id="heroName" class="text-4xl md:text-6xl font-900 mb-4" style="font-weight:900;line-height:1.1;text-transform:uppercase;font-family:'Times New Roman', 'Garamond', serif;background:linear-gradient(90deg,#a855f7 0%,#ec4899 25%,#3b82f6 50%,#06b6d4 75%,#a855f7 100%);background-size:400% 400%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:hero-name-flow 5s ease infinite,hero-name-pulse 2.5s ease-in-out infinite;letter-spacing:0.05em;text-shadow:0 0 60px rgba(168,85,247,0.5),0 0 100px rgba(236,72,153,0.3),inset 0 0 20px rgba(59,130,246,0.2);filter:drop-shadow(0 0 30px rgba(168,85,247,0.4)) drop-shadow(0 0 60px rgba(236,72,153,0.2))">Nguyễn Trần<br>
-       Hoàng Phúc</h1>
-     <p id="heroSubtitle" class="text-lg md:text-xl mb-4" style="background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600">PR Student · Designer · Content Creator</p>
-     <p id="heroDesc" class="text-base mb-8" style="color:rgba(255,255,255,0.5);max-width:480px;margin-left:auto;margin-right:auto">Xin chào, Tôi là người năng động, tỉ mỉ, sáng tạo, có trách nhiệm và luôn muốn mang lại năng lượng tích cực, truyền cảm hứng cho mọi người.</p>
-     <div class="flex flex-wrap justify-center gap-4"><a href="#projects" class="btn-primary"><i data-lucide="eye" style="width:18px;height:18px"></i> Xem dự án</a> <a href="#contact" class="btn-outline"><i data-lucide="mail" style="width:18px;height:18px"></i> Liên hệ</a>
+
+       <div class="glass p-10 neon-card group hover:border-pink-500/40" style="border-radius: 24px; transition: all 0.4s;">
+         <h3 class="text-xl font-800 mb-8 flex items-center gap-3 text-pink-400" style="font-family:'Montserrat',sans-serif"><i data-lucide="award" class="w-7 h-7"></i> Chứng chỉ nổi bật</h3>
+         
+         <div class="space-y-5">
+           <div class="flex items-start gap-5 p-5 rounded-2xl bg-white/5 hover:bg-white/10 transition-all duration-300 border border-white/5 hover:border-pink-500/30 hover:shadow-[0_8px_20px_rgba(236,72,153,0.15)]">
+             <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(236,72,153,0.4)] mt-1">
+               <i data-lucide="star" class="text-white w-6 h-6"></i>
+             </div>
+             <div>
+               <h4 class="text-[16px] font-bold text-white mb-1" style="font-family:'Montserrat',sans-serif">Chứng chỉ Thiết kế Đồ họa</h4>
+               <p class="text-[14px] text-gray-400" style="font-family:'Poppins',sans-serif">Cấp bởi: [Tên tổ chức] <br> Năm: 2024</p>
+             </div>
+           </div>
+
+           <div class="flex items-start gap-5 p-5 rounded-2xl bg-white/5 hover:bg-white/10 transition-all duration-300 border border-white/5 hover:border-pink-500/30 hover:shadow-[0_8px_20px_rgba(236,72,153,0.15)]">
+             <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(236,72,153,0.4)] mt-1">
+               <i data-lucide="medal" class="text-white w-6 h-6"></i>
+             </div>
+             <div>
+               <h4 class="text-[16px] font-bold text-white mb-1" style="font-family:'Montserrat',sans-serif">Khóa học Kỹ năng PR Thực chiến</h4>
+               <p class="text-[14px] text-gray-400" style="font-family:'Poppins',sans-serif">Cấp bởi: [Tên tổ chức] <br> Năm: 2023</p>
+             </div>
+           </div>
+         </div>
+       </div>
      </div>
     </div>
-   </section><!-- ABOUT -->
-   <section id="about" class="reveal-section py-24 px-6">
-    <div class="max-w-6xl mx-auto">
-     <h2 class="text-3xl md:text-4xl font-800 text-center mb-16" style="font-weight:800">VỀ <span style="background:linear-gradient(135deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">TÔI</span></h2>
-     <div class="grid md:grid-cols-2 gap-12 items-center"><!-- Left: avatar card -->
-      <div class="glass p-8 flex flex-col items-center text-center neon-card card-shine" style="position:relative;border-radius:20px">
-       <div class="accent-line" style="width:40%;margin-left:auto;margin-right:auto"></div>
-       <div style="width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#6366f1);display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:800;color:#fff;margin-bottom:24px;box-shadow:0 0 40px rgba(168,85,247,0.4);animation:float 3s ease-in-out infinite">
-        <img src="https://scontent.fsgn5-7.fna.fbcdn.net/v/t39.30808-6/486419229_122118718922766968_5517283650790658580_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeFZhYXDVR2rdSSwYZ-zxLpjJmB-OMsIcBEmYH44ywhwEYo4c0ZVoyBv-i4ZHXflHlg6l7-8Q5wYxiEcb7KZdIVW&_nc_ohc=GKD2cj1MUP0Q7kNvwGWwWFb&_nc_oc=AdppUERDyQXnrFYdn3scy2FeoCnutaXglfJf_gJkmNOSx5WF7Vato-mweh2CZZ9uqR9LpzaTo1YhQTjxciRfp08V&_nc_zt=23&_nc_ht=scontent.fsgn5-7.fna&_nc_gid=3tRslaB0kA2JH_daMdnRUg&_nc_ss=7a3a8&oh=00_Af0b0faQZ0KYxQI6fVqDN7zD868hWpJltYBX6xTalawSwg&oe=69E70D25" 
-       alt="Nguyễn Trần Hoàng Phúc" 
-       style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-       </div>
-       <div class="grid grid-cols-3 gap-4 w-full mt-4">
-        <div class="stat-card glass pulse-border-animation" style="border:2px solid rgba(168,85,247,0.3);border-radius:16px;animation:pulse-border 2.5s ease-in-out infinite">
-         <div class="stat-number gradient-text">
-          30+
-         </div>
-         <div class="text-xs mt-1" style="color:rgba(255,255,255,0.5)">
-          Dự án thiết kế 
-         </div>
-        </div>
-        <div class="stat-card glass pulse-border-animation" style="border:2px solid rgba(99,102,241,0.3);border-radius:16px;animation:pulse-border 2.5s ease-in-out infinite 0.3s">
-         <div class="stat-number gradient-text">
-          3+
-         </div>
-         <div class="text-xs mt-1" style="color:rgba(255,255,255,0.5)">
-          Dự án sự kiện
-         </div>
-        </div>
-        <div class="stat-card glass pulse-border-animation" style="border:2px solid rgba(59,130,246,0.3);border-radius:16px;animation:pulse-border 2.5s ease-in-out infinite 0.6s">
-         <div class="stat-number gradient-text">
-          4+
-         </div>
-         <div class="text-xs mt-1" style="color:rgba(255,255,255,0.5)">
-          Năm kinh nghiệm Design
-         </div>
-        </div>
-       </div>
-       <div class="accent-line" style="width:40%;margin-left:auto;margin-right:auto"></div>
-      </div><!-- Right: text -->
-      <div>
-       <p id="aboutText" class="text-base leading-relaxed mb-6" style="color:rgba(255,255,255,0.7)">Mình là Hoàng Phúc — sinh viên ngành Quan hệ Công chúng với niềm đam mê thiết kế và sáng tạo nội dung. Mình tin rằng mỗi thiết kế đều kể một câu chuyện, và mỗi chiến dịch truyền thông đều có sức mạnh thay đổi cách mọi người nhìn nhận thế giới.</p>
-       <p class="text-base leading-relaxed mb-6" style="color:rgba(255,255,255,0.7)">Với tư duy sáng tạo, khả năng làm việc nhóm và tinh thần học hỏi không ngừng, mình luôn tìm kiếm những cơ hội để phát triển bản thân và tạo ra giá trị.</p>
-       <div class="flex flex-wrap gap-3"><span class="glass px-4 py-2 text-sm neon-card" style="color:#a855f7;position:relative;border-radius:12px">🎨 Design</span> <span class="glass px-4 py-2 text-sm neon-card" style="color:#6366f1;position:relative;border-radius:12px">📢 PR</span> <span class="glass px-4 py-2 text-sm neon-card" style="color:#3b82f6;position:relative;border-radius:12px">✍️ Content</span> <span class="glass px-4 py-2 text-sm neon-card" style="color:#8b5cf6;position:relative;border-radius:12px">📷 Media</span>
-       </div>
+   </section>
+   
+   <section id="skills" class="reveal-section py-24 px-6 relative">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="text-center mb-16">
+         <h2 class="text-3xl md:text-4xl font-800" style="font-family:'Montserrat',sans-serif">KỸ <span class="gradient-text">NĂNG</span></h2>
+         <p class="mt-3 text-[15px] text-gray-400 font-medium" style="font-family:'Poppins',sans-serif">Những công cụ và thế mạnh tạo nên giá trị của mình</p>
       </div>
-     </div>
-    </div>
-   </section><!-- PROJECTS -->
-   <section id="projects" class="reveal-section py-24 px-6">
-    <div class="max-w-6xl mx-auto">
-     <h2 class="text-3xl md:text-4xl font-800 text-center mb-6" style="font-weight:800">DỰ <span style="background:linear-gradient(135deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">ÁN</span></h2>
-     <p class="text-center mb-12" style="color:rgba(255,255,255,0.4)">Một số dự án tiêu biểu</p>
-     <div class="flex flex-wrap justify-center gap-3 mb-12"><button class="filter-btn active" data-filter="all" style="position:relative;overflow:hidden">Tất cả</button> <button class="filter-btn" data-filter="design" style="position:relative;overflow:hidden">Design</button> <button class="filter-btn" data-filter="media" style="position:relative;overflow:hidden">Media</button> <button class="filter-btn" data-filter="branding" style="position:relative;overflow:hidden">Branding</button>
-     </div>
-     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="projectGrid"><!-- Cards generated by JS -->
-     </div>
-    </div>
-   </section><!-- SKILLS -->
-   <section id="skills" class="reveal-section py-24 px-6">
-    <div class="max-w-6xl mx-auto">
-     <h2 class="text-3xl md:text-4xl font-800 text-center mb-16" style="font-weight:800">KỸ <span style="background:linear-gradient(135deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">NĂNG</span></h2>
-     <div class="grid md:grid-cols-2 gap-12"><!-- Design tools -->
-      <div class="glass p-8">
-       <h3 class="text-xl font-700 mb-6 flex items-center gap-3" style="font-weight:700"><i data-lucide="palette" style="width:22px;height:22px;color:#a855f7;animation:bounce 2s ease-in-out infinite;display:inline-block"></i> Thiết kế & lập trình</h3>
-       <div class="space-y-5" id="designSkills"></div>
-      </div><!-- Soft skills -->
-      <div class="glass p-8">
-       <h3 class="text-xl font-700 mb-6 flex items-center gap-3" style="font-weight:700"><i data-lucide="brain" style="width:22px;height:22px;color:#6366f1;animation:bounce 2s ease-in-out infinite 0.2s;display:inline-block"></i> Kỹ năng mềm</h3>
-       <div class="space-y-5" id="softSkills"></div>
+
+      <div class="grid md:grid-cols-2 gap-10 lg:gap-16">
+        <div class="glass p-10 rounded-[32px] relative overflow-hidden group border border-white/5 hover:border-purple-500/40 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] bg-gradient-to-b from-white/[0.03] to-transparent">
+          <i data-lucide="pen-tool" class="absolute -right-10 -bottom-10 w-64 h-64 text-purple-500/5 group-hover:text-purple-500/15 transition-colors duration-700 transform -rotate-12 group-hover:scale-110"></i>
+          
+          <div class="flex items-center gap-5 mb-10 relative z-10">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-[0_0_25px_rgba(168,85,247,0.5)] group-hover:rotate-12 transition-transform duration-500">
+              <i data-lucide="palette" class="text-white w-8 h-8"></i>
+            </div>
+            <h3 class="text-[22px] font-bold text-white tracking-wide" style="font-family:'Montserrat',sans-serif">Thiết kế & Công cụ</h3>
+          </div>
+          
+          <div class="space-y-7 relative z-10" id="designSkills"></div>
+        </div>
+
+        <div class="glass p-10 rounded-[32px] relative overflow-hidden group border border-white/5 hover:border-blue-500/40 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] bg-gradient-to-b from-white/[0.03] to-transparent">
+          <i data-lucide="users" class="absolute -right-10 -bottom-10 w-64 h-64 text-blue-500/5 group-hover:text-blue-500/15 transition-colors duration-700 transform -rotate-12 group-hover:scale-110"></i>
+          
+          <div class="flex items-center gap-5 mb-10 relative z-10">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-[0_0_25px_rgba(59,130,246,0.5)] group-hover:-rotate-12 transition-transform duration-500">
+              <i data-lucide="brain" class="text-white w-8 h-8"></i>
+            </div>
+            <h3 class="text-[22px] font-bold text-white tracking-wide" style="font-family:'Montserrat',sans-serif">Kỹ năng mềm</h3>
+          </div>
+          
+          <div class="space-y-7 relative z-10" id="softSkills"></div>
+        </div>
       </div>
+    </div>
+   </section>
+
+   <section id="experience" class="reveal-section py-24 px-6 relative">
+    <div class="max-w-6xl mx-auto relative z-10">
+     <div class="text-center mb-16">
+       <h2 class="text-3xl md:text-4xl font-800" style="font-family:'Montserrat',sans-serif">KINH <span class="gradient-text">NGHIỆM</span></h2>
+       <p class="mt-3 text-[15px] text-gray-400 font-medium" style="font-family:'Poppins',sans-serif">Quá trình rèn luyện và đóng góp</p>
+     </div>
+     
+     <div class="relative w-full">
+       <div class="hidden md:block absolute top-[50%] left-10 right-10 h-1 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 transform -translate-y-1/2 z-0 rounded-full"></div>
+       
+       <div id="experienceHorizontal" class="flex flex-col md:flex-row flex-wrap gap-8 justify-center relative z-10">
+         </div>
      </div>
     </div>
-   </section><!-- EXPERIENCE -->
-   <section id="experience" class="reveal-section py-24 px-6">
-    <div class="max-w-6xl mx-auto">
-     <h2 class="text-3xl md:text-4xl font-800 text-center mb-16" style="font-weight:800">KINH <span style="background:linear-gradient(135deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">NGHIỆM</span></h2>
-     <div class="max-w-2xl mx-auto relative pl-12" id="timeline">
-      <div class="timeline-line"></div>
+   </section>
+
+   <section id="projects" class="reveal-section py-24 px-6 relative">
+    <div class="max-w-6xl mx-auto relative z-10">
+     <div class="text-center mb-16">
+       <h2 class="text-3xl md:text-4xl font-800" style="font-family:'Montserrat',sans-serif">DỰ <span class="gradient-text">ÁN</span></h2>
+       <p class="mt-3 text-[15px] text-gray-400 font-medium" style="font-family:'Poppins',sans-serif">Một số dự án tiêu biểu - Nhấp vào thẻ để xem chi tiết</p>
      </div>
+
+     <div class="flex flex-wrap justify-center gap-4 mb-14">
+        <button class="filter-btn active" data-filter="all">Tất cả</button> 
+        <button class="filter-btn" data-filter="design">Design</button> 
+        <button class="filter-btn" data-filter="media">Media</button> 
+        <button class="filter-btn" data-filter="branding">Branding</button>
+        <button class="filter-btn" data-filter="content">Content</button>
+     </div>
+     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8" id="projectGrid"></div>
     </div>
-   </section><!-- CONTACT -->
-   <section id="contact" class="reveal-section py-24 px-6">
-    <div class="max-w-4xl mx-auto">
+   </section>
+   
+   <section id="contact" class="reveal-section py-24 px-6 relative">
+    <div class="max-w-6xl mx-auto relative z-10">
      <div class="accent-line" style="width:80px;margin-left:auto;margin-right:auto;margin-bottom:24px"></div>
-     <h2 class="text-3xl md:text-4xl font-800 text-center mb-16" style="font-weight:800">LIÊN <span class="gradient-text">HỆ</span></h2>
-     <div class="accent-line" style="width:80px;margin-left:auto;margin-right:auto;margin-bottom:24px"></div>
-     <div class="grid md:grid-cols-2 gap-8"><!-- Info -->
-      <div class="glass p-8 space-y-6 neon-card" style="position:relative;border-radius:20px">
-       <h3 class="text-xl font-700 mb-4" style="font-weight:700">Thông tin liên hệ</h3>
-       <div class="flex items-center gap-4 group cursor-pointer contact-item">
-        <div class="contact-icon" style="width:44px;height:44px;border-radius:12px;background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;group-hover:background:rgba(168,85,247,0.25);group-hover:box-shadow:0 0 20px rgba(168,85,247,0.3)">
-         <i data-lucide="mail" style="width:20px;height:20px;color:#a855f7"></i>
+     <h2 class="text-3xl md:text-4xl font-800 text-center mb-16" style="font-family:'Montserrat',sans-serif">LIÊN <span class="gradient-text">HỆ</span></h2>
+     
+     <div class="grid md:grid-cols-2 gap-12">
+      <div class="glass p-12 space-y-10 neon-card" style="border-radius:32px">
+       <h3 class="text-[24px] font-800 mb-6 text-white" style="font-family:'Montserrat',sans-serif">Thông tin liên hệ</h3>
+       
+       <div class="flex items-center gap-6 group cursor-pointer contact-item">
+        <div class="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center transition-all duration-400 group-hover:bg-purple-500/20 group-hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] group-hover:scale-110">
+         <i data-lucide="mail" class="w-7 h-7 text-purple-400 group-hover:text-purple-300 transition-colors"></i>
         </div>
         <div>
-         <div class="text-xs" style="color:rgba(255,255,255,0.4)">
-          Email
-         </div>
-         <div id="contactEmail" class="text-sm font-500" style="font-weight:500">
+         <div class="text-[13px] text-gray-400 mb-1 tracking-wider uppercase font-semibold" style="font-family:'Poppins',sans-serif">Email</div>
+         <div id="contactEmail" class="text-[16px] font-medium text-white group-hover:text-purple-300 transition-colors" style="font-family:'Poppins',sans-serif">
           <a href="mailto:nguyentranhoanghuc.zica@gmail.com">nguyentranhoangphuc.zica@gmail.com</a>
          </div>
         </div>
        </div>
-       <div class="flex items-center gap-4 group cursor-pointer contact-item">
-        <div class="contact-icon" style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;group-hover:background:rgba(99,102,241,0.25);group-hover:box-shadow:0 0 20px rgba(99,102,241,0.3)">
-         <i data-lucide="phone" style="width:20px;height:20px;color:#6366f1"></i>
+
+       <div class="flex items-center gap-6 group cursor-pointer contact-item">
+        <div class="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center transition-all duration-400 group-hover:bg-indigo-500/20 group-hover:shadow-[0_0_25px_rgba(99,102,241,0.3)] group-hover:scale-110">
+         <i data-lucide="phone" class="w-7 h-7 text-indigo-400 group-hover:text-indigo-300 transition-colors"></i>
         </div>
         <div>
-         <div class="text-xs" style="color:rgba(255,255,255,0.4)">
-          Phone
-         </div>
-         <div id="contactPhone" class="text-sm font-500" style="font-weight:500">
-          <a href='tel: +84967195053' > 0967195053 </a>
+         <div class="text-[13px] text-gray-400 mb-1 tracking-wider uppercase font-semibold" style="font-family:'Poppins',sans-serif">Điện thoại</div>
+         <div id="contactPhone" class="text-[16px] font-medium text-white group-hover:text-indigo-300 transition-colors" style="font-family:'Poppins',sans-serif">
+          <a href='tel:+84967195053'>0967 195 053</a>
          </div>
         </div>
        </div>
-       <div class="flex items-center gap-4 group cursor-pointer contact-item">
-        <div class="contact-icon" style="width:44px;height:44px;border-radius:12px;background:rgba(59,130,246,0.15);display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;group-hover:background:rgba(59,130,246,0.25);group-hover:box-shadow:0 0 20px rgba(59,130,246,0.3)">
-         <i data-lucide="facebook" style="width:20px;height:20px;color:#3b82f6"></i>
+
+       <div class="flex items-center gap-6 group cursor-pointer contact-item">
+        <div class="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center transition-all duration-400 group-hover:bg-blue-500/20 group-hover:shadow-[0_0_25px_rgba(59,130,246,0.3)] group-hover:scale-110">
+         <i data-lucide="facebook" class="w-7 h-7 text-blue-400 group-hover:text-blue-300 transition-colors"></i>
         </div>
         <div>
-         <div class="text-xs" style="color:rgba(255,255,255,0.4)">
-          Facebook
-         </div>
-         <div class="text-sm font-500" style="font-weight:500">
-          <a href="https://www.facebook.com/nguyentranhoangphuc.zica">Nguyen Tran Hoang Phuc</a>
+         <div class="text-[13px] text-gray-400 mb-1 tracking-wider uppercase font-semibold" style="font-family:'Poppins',sans-serif">Facebook</div>
+         <div class="text-[16px] font-medium text-white group-hover:text-blue-300 transition-colors" style="font-family:'Poppins',sans-serif">
+          <a href="https://www.facebook.com/nguyentranhoangphuc.zica" target="_blank">Nguyen Tran Hoang Phuc</a>
          </div>
         </div>
        </div>
-      </div><!-- Form -->
-      <div class="glass p-8 neon-card" style="position:relative;border-radius:20px">
-       <h3 class="text-xl font-700 mb-6" style="font-weight:700">Gửi tin nhắn</h3>
-       <form id="contactForm" class="space-y-4"><input type="text" class="form-input" placeholder="Họ và tên" required aria-label="Họ và tên"> <input type="email" class="form-input" placeholder="Email" required aria-label="Email"> <textarea class="form-input" rows="4" placeholder="Nội dung tin nhắn..." required aria-label="Nội dung"></textarea> <button type="submit" class="btn-primary w-full justify-center transition-transform hover:scale-105"><i data-lucide="send" style="width:18px;height:18px"></i> Gửi tin nhắn</button>
+      </div>
+      
+      <div class="glass p-12 neon-card" style="border-radius:32px">
+       <h3 class="text-[24px] font-800 mb-8 text-white" style="font-family:'Montserrat',sans-serif">Gửi tin nhắn</h3>
+       <form id="contactForm" class="space-y-6">
+         <input type="text" class="form-input" placeholder="Họ và tên" required aria-label="Họ và tên"> 
+         <input type="email" class="form-input" placeholder="Email của bạn" required aria-label="Email"> 
+         <textarea class="form-input resize-none" rows="5" placeholder="Nội dung tin nhắn..." required aria-label="Nội dung"></textarea> 
+         <button type="submit" class="btn-primary w-full justify-center mt-2 text-[16px] py-4"><i data-lucide="send" style="width:20px;height:20px"></i> Gửi tin nhắn ngay</button>
        </form>
-       <div id="formSuccess" class="hidden mt-4 text-center text-sm" style="color:#a855f7;animation:float-in 0.5s ease-out">
-        ✨ Cảm ơn bạn! Tin nhắn đã được gửi.
+       <div id="formSuccess" class="hidden mt-6 text-center text-[15px] font-medium text-green-400" style="animation:float-in 0.5s ease-out;font-family:'Poppins',sans-serif">
+        ✨ Cảm ơn bạn! Tin nhắn đã được gửi thành công.
        </div>
       </div>
      </div>
     </div>
-   </section><!-- FOOTER -->
-   <footer class="py-8 px-6 text-center text-sm" style="color:rgba(255,255,255,0.3);border-top:1px solid rgba(255,255,255,0.05)">
-    <p>© 2025 Nguyễn Trần Hoàng Phúc💜</p>
-   </footer>
-  </div>
-  <script>
-// ===== DATA =====
-const projects = [
-  {cat:'design',title:'Poster Sự Kiện',desc:'Thiết kế poster cho sự kiện trường',emoji:'🎨',gradient:'linear-gradient(135deg,#a855f7,#6366f1)',link:'#'},
-  {cat:'branding',title:'Logo Câu Lạc Bộ',desc:'Thiết kế logo và bộ nhận diện',emoji:'✏️',gradient:'linear-gradient(135deg,#6366f1,#3b82f6)',link:'#'},
-  {cat:'media',title:'Video Recap',desc:'Dựng video recap sự kiện',emoji:'🎬',gradient:'linear-gradient(135deg,#3b82f6,#06b6d4)',link:'#'},
-  {cat:'design',title:'Banner Social Media',desc:'Thiết kế banner cho fanpage',emoji:'📱',gradient:'linear-gradient(135deg,#8b5cf6,#a855f7)',link:'#'},
-  {cat:'branding',title:'Slide Pitch Deck',desc:'Thiết kế slide thuyết trình',emoji:'📊',gradient:'linear-gradient(135deg,#6366f1,#8b5cf6)',link:'#'},
-  {cat:'media',title:'Content Campaign',desc:'Lên kế hoạch nội dung MXH',emoji:'📝',gradient:'linear-gradient(135deg,#3b82f6,#6366f1)',link:'#'},
-];
+   </section>
+   
+   <footer class="relative pt-24 pb-8 px-6 mt-20 overflow-hidden" style="background: linear-gradient(180deg, transparent 0%, rgba(10,10,26,0.8) 40%, rgba(10,10,26,1) 100%);">
+      <div class="absolute bottom-[-10%] left-1/2 transform -translate-x-1/2 w-[80%] max-w-4xl h-64 bg-purple-600/30 blur-[120px] pointer-events-none z-0"></div>
 
-const designSkills = 
-[{name:'Canva',pct:90},
-{name:'CapCut',pct:70},
-{name:'Ngôn ngữ lập trình HTML',pct:90},
-{name:'Word-Excel-Powerpoint',pct:85},
-];
-const softSkills = 
-[{name:'Giao tiếp',pct:90},
-{name:'Làm việc nhóm',pct:88},
-{name:'Tư duy sáng tạo',pct:92},
-{name:'Quản lý thời gian',pct:80},
-{name:'Thuyết trình',pct:85}];
+      <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none select-none flex justify-center pointer-events-none z-0">
+        <span class="text-[12vw] font-900 text-white/[0.02] whitespace-nowrap" style="font-family:'Montserrat',sans-serif; letter-spacing: 0.05em;">HOÀNG PHÚC</span>
+      </div>
 
-const experiences = [
-  {year:'2025',title:'CTV Đoàn Khoa',org:'Khoa Khoa học Xã hội và Quan hệ Công chúng - HUTECH',desc:'Đảm nhận vị trí design'},
-  {year:'2025',title:'Sinh viên PR năm nhất, Bí Thư Chi Đoàn 25DQCA1',org:'HUTECH',desc:'Bắt đầu quá trình học tập đại học'},
-  {year:'2024',title:'Đội trưởng Đội Phát thanh & Truyền thông',org:'Trường THPT Cái Bè',desc:'Quản lí, Điều hành Đội đồng thời đảm nhiệm vị trí desgin, content'},
-  {year:'2022-2025',title:'Bí Thư Chi Đoàn A12',org:'Trường THPT Cái Bè',desc:'Quản lí, Điều hành hoạt động Đoàn ở Chi Đoàn'},
-];
+      <div class="max-w-6xl mx-auto relative z-10">
+        
+        <div class="glass p-10 md:p-14 rounded-[32px] flex flex-col md:flex-row items-center justify-between gap-8 mb-20 border border-white/10 hover:border-purple-500/30 transition-colors shadow-[0_20px_50px_rgba(0,0,0,0.3)] bg-gradient-to-r from-purple-900/10 to-pink-900/10">
+          <div class="text-center md:text-left">
+            <h2 class="text-3xl md:text-4xl font-800 text-white mb-4" style="font-family:'Montserrat',sans-serif">Sẵn sàng hợp tác?</h2>
+            <p class="text-[15px] text-gray-400 font-medium" style="font-family:'Poppins',sans-serif">Cùng nhau biến ý tưởng của bạn thành hiện thực.</p>
+          </div>
+          <a href="#contact" class="btn-primary shrink-0 text-[16px] py-4 px-8 shadow-[0_10px_30px_rgba(168,85,247,0.4)] hover:scale-105">
+            <i data-lucide="zap" class="w-5 h-5"></i> Bắt đầu ngay
+          </a>
+        </div>
 
-// ===== RENDER PROJECTS =====
-const projectGrid = document.getElementById('projectGrid');
-let currentFilter = 'all';
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12 items-center text-center md:text-left">
+          
+          <div class="flex flex-col items-center md:items-start gap-5">
+            <a href="#hero" class="relative group flex items-center justify-center w-[56px] h-[56px] rounded-[16px] bg-gradient-to-br from-purple-500 to-pink-500 p-[2px] transition-transform duration-300 hover:scale-110 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
+              <img src="https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-6/671174672_122191325558766968_2146783314959942852_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=101&ccb=1-7&_nc_sid=13d280&_nc_eui2=AeGFpUzT2puWiTwXaLXSvC-aAnqFqWIjowsCeoWpYiOjC0fPJ0GMS3lF_pkn-BsuCPMwlwTqT9-VSLvnthpfjhrR&_nc_ohc=Ob7KY5trBp4Q7kNvwETZq61&_nc_oc=AdpHV2z6s0K0Vo_okHLMVf7gsk57wksX0iJrAWBpMR5DOSKuGlwvuNwoXZa3Rv5Qydk&_nc_zt=23&_nc_ht=scontent.fhan3-3.fna&_nc_gid=KeJnOegSuCG-yXOQZ9ED4A&_nc_ss=7a3a8&oh=00_Af3AC3eFw4iK74J0pkExbIj39TEh5gqtF45P7QJV45aSEw&oe=69E6E6B0" alt="Logo" class="w-full h-full rounded-[14px] object-cover relative z-10">
+            </a>
+            <h3 class="text-xl font-bold text-white tracking-wide" style="font-family:'Montserrat',sans-serif">Nguyễn Trần Hoàng Phúc</h3>
+            <p class="text-[14px] text-gray-400 font-medium leading-relaxed max-w-sm" style="font-family:'Poppins',sans-serif">Sáng tạo không giới hạn — kết nối thương hiệu, truyền cảm hứng qua thiết kế và nội dung.</p>
+          </div>
 
-function renderProjects(filter) {
-  currentFilter = filter;
-  const filtered = filter === 'all' ? projects : projects.filter(p => p.cat === filter);
-  projectGrid.innerHTML = '';
-  filtered.forEach((p, i) => {
-    const card = document.createElement('a');
-    card.href = p.link;
-    card.target = '_blank';
-    card.rel = 'noopener noreferrer';
-    card.className = 'project-card glass overflow-hidden neon-card card-shine';
-    card.style.animationDelay = `${i * 0.12}s`;
-    card.style.cursor = 'pointer';
-    card.style.textDecoration = 'none';
-    card.style.border = 'none';
-    card.style.background = 'transparent';
-    card.style.padding = '0';
-    card.style.textAlign = 'left';
-    card.style.width = '100%';
-    card.style.position = 'relative';
-    card.innerHTML = `
-      <div style="height:180px;background:${p.gradient};display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;box-shadow:inset 0 0 40px rgba(0,0,0,0.3);transition:all 0.4s cubic-bezier(0.22,1,0.36,1);border-radius:20px 20px 0 0">
-        ${p.emoji}
-        <div class="card-overlay" style="position:absolute;inset:0;background:rgba(10,10,26,0.7);display:flex;align-items:center;justify-content:center;border-radius:20px 20px 0 0;opacity:0;transition:opacity 0.3s ease">
-          <span style="color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px"><i data-lucide="arrow-right" style="width:16px;height:16px"></i> Xem chi tiết</span>
+          <div class="flex flex-col items-center gap-4">
+            <h4 class="text-white font-bold mb-2 uppercase tracking-widest text-[13px]" style="font-family:'Montserrat',sans-serif">Khám phá</h4>
+            <div class="flex gap-6 text-[14px] font-medium text-gray-400" style="font-family:'Poppins',sans-serif">
+              <a href="#about" class="hover:text-purple-400 transition-colors">Về tôi</a>
+              <a href="#projects" class="hover:text-purple-400 transition-colors">Dự án</a>
+              <a href="#experience" class="hover:text-purple-400 transition-colors">Kinh nghiệm</a>
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center md:items-end gap-4">
+            <h4 class="text-white font-bold mb-2 uppercase tracking-widest text-[13px]" style="font-family:'Montserrat',sans-serif">Kết nối</h4>
+            <div class="flex gap-4">
+              <a href="https://www.facebook.com/nguyentranhoangphuc.zica" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-blue-500 hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_10px_rgba(0,0,0,0.3)] hover:shadow-[0_0_20px_rgba(59,130,246,0.6)]">
+                <i data-lucide="facebook" class="w-5 h-5"></i>
+              </a>
+              <a href="mailto:nguyentranhoangphuc.zica@gmail.com" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-purple-500 hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_10px_rgba(0,0,0,0.3)] hover:shadow-[0_0_20px_rgba(168,85,247,0.6)]">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+           <p class="text-[13px] text-gray-500 font-medium" style="font-family:'Poppins',sans-serif">© 2025 Nguyễn Trần Hoàng Phúc. All rights reserved.</p>
+           
+           <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-400 hover:text-white hover:border-pink-500 transition-all duration-300 group">
+             <i data-lucide="chevron-up" class="w-5 h-5 group-hover:-translate-y-1 transition-transform"></i>
+           </button>
+
+           <p class="text-[13px] text-gray-500 font-medium flex items-center gap-1.5" style="font-family:'Poppins',sans-serif">
+             Made with <i data-lucide="heart" class="w-3.5 h-3.5 text-pink-500 fill-pink-500 animate-pulse"></i> by HP
+           </p>
         </div>
       </div>
-      <div class="p-5" style="background:rgba(10,10,26,0.5);border-radius:0 0 20px 20px;transition:background 0.3s ease">
-        <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(168,85,247,0.15);color:#a855f7;display:inline-block;font-weight:600">${p.cat}</span>
-        <h4 class="text-base font-600 mt-3" style="font-weight:600;transition:color 0.3s ease">${p.title}</h4>
-        <p class="text-sm mt-1" style="color:rgba(255,255,255,0.4);transition:color 0.3s ease">${p.desc}</p>
+   </footer>
+  </div>
+
+  <script>
+// SCRIPTS GIỮ NGUYÊN HOÀN TOÀN ...
+const starsContainer = document.getElementById('stars-container');
+for (let i = 0; i < 80; i++) {
+  const star = document.createElement('div');
+  star.className = 'star-twinkle';
+  star.style.left = Math.random() * 100 + 'vw';
+  star.style.top = Math.random() * 100 + 'vh';
+  const size = Math.random() * 2 + 1;
+  star.style.width = size + 'px';
+  star.style.height = size + 'px';
+  star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+  star.style.animationDelay = (Math.random() * 5) + 's';
+  starsContainer.appendChild(star);
+}
+
+const fireflyContainer = document.createElement('div');
+fireflyContainer.style.position = 'fixed';
+fireflyContainer.style.inset = '0';
+fireflyContainer.style.pointerEvents = 'none';
+fireflyContainer.style.zIndex = '3';
+document.body.appendChild(fireflyContainer);
+
+for (let i = 0; i < 25; i++) {
+  const firefly = document.createElement('div');
+  firefly.style.position = 'absolute';
+  firefly.style.width = Math.random() * 3 + 2 + 'px';
+  firefly.style.height = firefly.style.width;
+  firefly.style.backgroundColor = ['#a855f7', '#ec4899', '#3b82f6'][Math.floor(Math.random() * 3)];
+  firefly.style.borderRadius = '50%';
+  firefly.style.boxShadow = `0 0 12px ${firefly.style.backgroundColor}, 0 0 20px ${firefly.style.backgroundColor}`;
+  firefly.style.left = Math.random() * 100 + 'vw';
+  firefly.style.bottom = '-20px';
+  firefly.style.animation = `float-up ${Math.random() * 10 + 15}s linear infinite`;
+  firefly.style.animationDelay = `${Math.random() * 15}s`;
+  firefly.style.opacity = '0';
+  fireflyContainer.appendChild(firefly);
+}
+
+const projects = [
+  {
+    type: 'project',
+    cat: 'design',
+    id: 'powerpoint-design',
+    title: 'Thiết kế Powerpoint',
+    desc: 'Thiết kế Powerpoint cho HS/SV',
+    emoji: '🎨',
+    gradient: 'linear-gradient(135deg,#a855f7,#7c3aed)',
+    fullDescription: 'Dịch vụ thiết kế Powerpoint chuyên nghiệp cho học sinh và sinh viên. Giúp bạn tạo những bài thuyết trình ấn tượng với các mẫu thiết kế hiện đại và hấp dẫn.',
+    objective: 'Mục tiêu là tạo ra những slide PowerPoint có thiết kế chuyên nghiệp, dễ hiểu và thu hút được sự chú ý của khán giả. Kết quả là những bài thuyết trình hoàn chỉnh và tự tin.',
+    tools: ['PowerPoint', 'Canva', 'Design Thinking', 'Typography'],
+    gallery: [
+      { name: 'PPT Template 1', link: 'https://canvprvn.my.canva.site/mau-ppt-zica', image: '🎨' },
+      { name: 'PPT Template 2', link: 'https://canvprvn.my.canva.site/mau-ppt-zica', image: '📊' },
+      { name: 'PPT Template 3', link: 'https://canvprvn.my.canva.site/mau-ppt-zica', image: '🖼️' },
+    ],
+    links: [
+      { label: 'Xem Portfolio', url: 'https://canvprvn.my.canva.site/mau-ppt-zica', icon: 'external-link' },
+      { label: 'Liên hệ', url: 'mailto:nguyentranhoanghuc.zica@gmail.com', icon: 'mail', type: 'secondary' }
+    ]
+  },
+  {
+    type: 'project',
+    cat: 'branding',
+    id: 'logo-design',
+    title: 'Logo & Nhận diện Câu Lạc Bộ',
+    desc: 'Thiết kế logo và bộ nhận diện',
+    emoji: '✏️',
+    gradient: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+    fullDescription: 'Thiết kế bộ nhận diện hoàn chỉnh cho câu lạc bộ, bao gồm logo, màu sắc chính, typography và hướng dẫn sử dụng. Tạo ra một hình ảnh thương hiệu mạnh mẽ và dễ nhận diện.',
+    objective: 'Xây dựng bộ nhận diện thương hiệu độc đáo và chuyên nghiệp cho câu lạc bộ. Đảm bảo tính nhất quán trên tất cả các vật liệu marketing và giúp phân biệt câu lạc bộ trong thị trường.',
+    tools: ['Adobe Illustrator', 'Canva', 'Brand Guidelines', 'Color Theory'],
+    gallery: [
+      { name: 'Logo Design', link: '#', image: '🎯' },
+      { name: 'Brand Guideline', link: '#', image: '📋' },
+      { name: 'Color Palette', link: '#', image: '🎨' },
+    ],
+    links: [
+      { label: 'Xem Thiết kế', url: '#', icon: 'eye' },
+      { label: 'Liên hệ để tư vấn', url: 'mailto:nguyentranhoanghuc.zica@gmail.com', icon: 'mail', type: 'secondary' }
+    ]
+  },
+  {
+    type: 'project',
+    cat: 'media',
+    id: 'video-recap',
+    title: 'Video Recap Sự kiện',
+    desc: 'Dựng video recap sự kiện',
+    emoji: '🎬',
+    gradient: 'linear-gradient(135deg,#6d28d9,#a855f7)',
+    fullDescription: 'Sản xuất video recap chuyên nghiệp cho các sự kiện, tôi sử dụng những kỹ thuật quay phim và chỉnh sửa video hiện đại để tạo ra những đoạn video hấp dẫn và đáng nhớ.',
+    objective: 'Tạo ra những video recap chất lượng cao, giúp lưu giữ kỷ niệm về sự kiện và chia sẻ trên các nền tảng mạng xã hội để tăng sự tương tác với công chúng.',
+    tools: ['CapCut', 'Adobe Premiere', 'DaVinci Resolve', 'Motion Graphics'],
+    gallery: [
+      { name: 'Video 1', link: 'https://www.youtube.com', image: '🎥' },
+      { name: 'Video 2', link: 'https://www.youtube.com', image: '📹' },
+      { name: 'Teaser Video', link: 'https://www.youtube.com', image: '✨' },
+    ],
+    links: [
+      { label: 'Xem YouTube', url: 'https://www.youtube.com', icon: 'play' },
+      { label: 'Đặt hàng dịch vụ', url: 'mailto:nguyentranhoanghuc.zica@gmail.com', icon: 'mail', type: 'secondary' }
+    ]
+  },
+  {
+    type: 'project',
+    cat: 'content',
+    id: 'fanpage-management',
+    title: 'Quản trị Nội dung Fanpage',
+    desc: 'Lên plan content & hình ảnh cho Fanpage',
+    emoji: '📱',
+    gradient: 'linear-gradient(135deg,#3b82f6,#8b5cf6)',
+    fullDescription: 'Xây dựng kế hoạch nội dung (Content Calendar) hàng tháng cho Fanpage, bao gồm lên ý tưởng, viết bài chuẩn SEO, và thiết kế hình ảnh minh họa đồng bộ với nhận diện thương hiệu.',
+    objective: 'Tăng 50% lượng tương tác (Engagement Rate) tự nhiên và thu hút thêm lượng người theo dõi mới trong vòng 3 tháng thông qua nội dung sáng tạo, bắt trend.',
+    tools: ['Copywriting', 'Facebook Creator Studio', 'Canva', 'Social Analytics'],
+    gallery: [
+      { name: 'Content Plan', link: '#', image: '📅' },
+      { name: 'Viral Post', link: '#', image: '🔥' },
+    ],
+    links: [
+      { label: 'Xem Fanpage', url: '#', icon: 'external-link' }
+    ]
+  },
+  {
+    type: 'project',
+    cat: 'design',
+    id: 'ui-ux-portfolio',
+    title: 'Giao diện Web Cá nhân',
+    desc: 'Thiết kế UI/UX cho Portfolio',
+    emoji: '💻',
+    gradient: 'linear-gradient(135deg,#ec4899,#f43f5e)',
+    fullDescription: 'Thiết kế toàn bộ giao diện người dùng (UI) và trải nghiệm người dùng (UX) cho trang web Portfolio cá nhân. Ứng dụng xu hướng Glassmorphism và Dark Mode hiện đại.',
+    objective: 'Tạo ra một trang web mượt mà, tối ưu trên cả giao diện điện thoại và máy tính, giúp thể hiện tốt nhất các dự án và kỹ năng cá nhân.',
+    tools: ['Figma', 'Wireframing', 'Prototyping', 'Color Psychology'],
+    gallery: [
+      { name: 'Homepage UI', link: '#', image: '🏠' },
+      { name: 'Mobile View', link: '#', image: '📱' },
+    ],
+    links: [
+      { label: 'Xem Figma', url: '#', icon: 'figma' }
+    ]
+  },
+  {
+    type: 'project',
+    cat: 'media',
+    id: 'podcast-production',
+    title: 'Sản xuất Podcast Học Đường',
+    desc: 'Thu âm & dựng số Podcast sinh viên',
+    emoji: '🎙️',
+    gradient: 'linear-gradient(135deg,#f59e0b,#ea580c)',
+    fullDescription: 'Chịu trách nhiệm từ khâu lên kịch bản, làm Host/MC, đến việc thu âm, lọc tạp âm và mix nhạc nền cho series Podcast chia sẻ về kinh nghiệm học thuật và đời sống sinh viên.',
+    objective: 'Cung cấp nội dung âm thanh chất lượng cao, dễ nghe, truyền cảm hứng tích cực cho cộng đồng sinh viên trong trường.',
+    tools: ['Audacity', 'Adobe Audition', 'Scriptwriting', 'Voice Talent'],
+    gallery: [
+      { name: 'Episode 1', link: '#', image: '🎧' },
+      { name: 'Behind the Scenes', link: '#', image: '🎤' },
+    ],
+    links: [
+      { label: 'Nghe Podcast', url: '#', icon: 'headphones' }
+    ]
+  }
+];
+
+const designSkills = [
+  {name:'Canva Pro / Nâng cao',pct:90},
+  {name:'CapCut Video Editing',pct:75},
+  {name:'Lập trình Web (HTML/CSS)',pct:85},
+  {name:'Microsoft Office Suite',pct:88},
+];
+const softSkills = [
+  {name:'Giao tiếp & Thuyết trình',pct:92},
+  {name:'Làm việc nhóm (Teamwork)',pct:90},
+  {name:'Tư duy sáng tạo & Logic',pct:95},
+  {name:'Quản lý thời gian & Tổ chức',pct:85}
+];
+
+const experiences = [
+  {
+    id: 'exp-2025-ctv',
+    year: '2025',
+    title: 'CTV Đoàn Khoa',
+    org: 'Khoa KHXH&QHCC - HUTECH',
+    desc: 'Đảm nhận vị trí thiết kế hình ảnh cho các hoạt động của khoa. Xây dựng hình ảnh chuyên nghiệp cho các sự kiện sinh viên.',
+    type: 'experience',
+    emoji: '🚀',
+    gradient: 'linear-gradient(135deg,#a855f7,#7c3aed)',
+    fullDescription: 'Thành viên nòng cốt trong ban truyền thông của Đoàn khoa, chịu trách nhiệm xây dựng hình ảnh chuyên nghiệp cho các sự kiện sinh viên.',
+    objective: 'Số hóa và hiện đại hóa bộ nhận diện các sự kiện của Khoa. Kết quả: Tăng 40% tương tác trên fanpage khoa qua các bộ hình ảnh sự kiện ấn tượng.',
+    tools: ['Canva Pro', 'AI Tools', 'Branding Strategy', 'Teamwork'],
+    links: [{ label: 'Liên hệ Khoa', url: 'https://www.facebook.com/hutech.socialscience.pr', icon: 'facebook' }]
+  },
+  {
+    id: 'exp-2025-secretary',
+    year: '2025',
+    title: 'Bí Thư Chi Đoàn 25DQCA1',
+    org: 'Trường Đại học HUTECH',
+    desc: 'Dẫn dắt các hoạt động phong trào và học tập của tập thể lớp. Tổ chức các buổi sinh hoạt chuyên đề, ngoại khóa.',
+    type: 'experience',
+    emoji: '🎓',
+    gradient: 'linear-gradient(135deg,#7c3aed,#6366f1)',
+    fullDescription: 'Đảm nhiệm vai trò lãnh đạo chi đoàn, tổ chức các buổi sinh hoạt chuyên đề, hoạt động ngoại khóa và quản lý hồ sơ đoàn viên.',
+    objective: 'Xây dựng một tập thể đoàn kết, năng động và tiên phong trong các hoạt động của trường. Đạt danh hiệu Chi đoàn vững mạnh.',
+    tools: ['Leadership', 'Event Planning', 'Public Speaking', 'Management'],
+    links: []
+  },
+  {
+    id: 'exp-2024-captain',
+    year: '2024',
+    title: 'Đội trưởng Đội Truyền thông',
+    org: 'Trường THPT Cái Bè',
+    desc: 'Quản lí điều hành đội ngũ 15 thành viên, sản xuất tin tức và thiết kế ấn phẩm truyền thông học đường.',
+    type: 'experience',
+    emoji: '📡',
+    gradient: 'linear-gradient(135deg,#6366f1,#3b82f6)',
+    fullDescription: 'Điều hành đội ngũ 15 thành viên sản xuất các bản tin phát thanh học đường và quản lý nội dung số trên các nền tảng mạng xã hội của trường.',
+    objective: 'Cải tiến quy trình sản xuất bản tin, ứng dụng công nghệ vào thiết kế content. Kết quả: Kênh truyền thông trường đạt mốc 10.000 followers.',
+    tools: ['Content Creation', 'Audio Editing', 'Social Media Management', 'Graphic Design'],
+    links: []
+  },
+  {
+    id: 'exp-2022-secretary',
+    year: '2022-2025',
+    title: 'Bí Thư Chi Đoàn A12',
+    org: 'Trường THPT Cái Bè',
+    desc: 'Quản lí và điều hành các hoạt động Đoàn tại cơ sở liên tiếp trong 3 năm học.',
+    type: 'experience',
+    emoji: '💪',
+    gradient: 'linear-gradient(135deg,#3b82f6,#a855f7)',
+    fullDescription: 'Ba năm liên tiếp giữ chức vụ Bí thư, chịu trách nhiệm chính cho mọi phong trào thi đua và hoạt động tình nguyện của lớp.',
+    objective: 'Duy trì phong trào lớp luôn nằm trong top đầu của trường. Tổ chức thành công hơn 20 sự kiện lớn nhỏ trong suốt 3 năm học.',
+    tools: ['Problem Solving', 'Strategic Planning', 'Collaboration'],
+    links: []
+  }
+];
+
+window.addEventListener('load', () => { setTimeout(() => { document.getElementById('loader').classList.add('hidden'); }, 1500); });
+
+const cursor = document.createElement('div'); cursor.classList.add('cursor-glow'); document.body.appendChild(cursor);
+const cursorDot = document.createElement('div'); cursorDot.classList.add('cursor-glow-dot'); document.body.appendChild(cursorDot);
+
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+  cursorDot.style.left = e.clientX + 'px'; cursorDot.style.top = e.clientY + 'px';
+});
+
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 50;
+  const y = (e.clientY / window.innerHeight - 0.5) * 50;
+  document.querySelectorAll('.glass-shape').forEach((shape, index) => {
+    const speed = index + 1;
+    shape.style.setProperty('--mx', `${x * speed}px`);
+    shape.style.setProperty('--my', `${y * speed}px`);
+  });
+});
+
+document.addEventListener('mousedown', () => cursorDot.classList.add('active'));
+document.addEventListener('mouseup', () => cursorDot.classList.remove('active'));
+
+document.querySelectorAll('a, button, .glass').forEach(el => {
+  el.addEventListener('mouseenter', () => cursorDot.style.transform = 'translate(-50%, -50%) scale(2.5)');
+  el.addEventListener('mouseleave', () => cursorDot.style.transform = 'translate(-50%, -50%) scale(1)');
+});
+
+const aboutImages = [
+  "https://scontent.fsgn5-7.fna.fbcdn.net/v/t39.30808-6/486419229_122118718922766968_5517283650790658580_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeFZhYXDVR2rdSSwYZ-zxLpjJmB-OMsIcBEmYH44ywhwEYo4c0ZVoyBv-i4ZHXflHlg6l7-8Q5wYxiEcb7KZdIVW&_nc_ohc=GKD2cj1MUP0Q7kNvwGWwWFb&_nc_oc=AdppUERDyQXnrFYdn3scy2FeoCnutaXglfJf_gJkmNOSx5WF7Vato-mweh2CZZ9uqR9LpzaTo1YhQTjxciRfp08V&_nc_zt=23&_nc_ht=scontent.fsgn5-7.fna&_nc_gid=3tRslaB0kA2JH_daMdnRUg&_nc_ss=7a3a8&oh=00_Af0b0faQZ0KYxQI6fVqDN7zD868hWpJltYBX6xTalawSwg&oe=69E70D25", 
+  "https://scontent.fsgn5-7.fna.fbcdn.net/v/t39.30808-6/683174677_122193062066766968_622138835899588796_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeERoDeUZkLheAT1bDhlnwKt7J14GbhFrIHsnXgZuEWsgeOtQ92vo1VEoniEV8py5shUFZC12FMmezGGrq_r1mKm&_nc_ohc=gTRa7MKbfPkQ7kNvwHmGW-A&_nc_oc=AdqsS3LgtZ_b_Mwm97kstDUT1KBPVK4YlEzvif6j0PvyxIqOxat9WeeBsWTJZ94vpohG-HQCNknZiIKiRdmXuk02&_nc_zt=23&_nc_ht=scontent.fsgn5-7.fna&_nc_gid=pr49LGDhhkqxEQkPb9PndQ&_nc_ss=7b2a8&oh=00_Af0mdbTQRPQ_hN1av163fgsvVH-enwoA_4dv8Y6g3X7CPw&oe=69F449BA", 
+  "https://scontent.fsgn5-1.fna.fbcdn.net/v/t39.30808-6/679748727_122193062036766968_7251366274666262377_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeHTBRJlaJzd0HdFvn-1M55J3M3CJXYtEBrczcIldi0QGn40yTXvpDz8wrCLS1L97kpoxuyHRtOVGfj_f-DnigWg&_nc_ohc=4icA86KNyfcQ7kNvwHJzelJ&_nc_oc=AdrTrcONLrV464_NqwpreNkKcuHf4Mnhq_i672XTJoX6xLMIuwMXBzg_yMF-YmNpUpnAblozaUe34cjmUR3B4bWB&_nc_zt=23&_nc_ht=scontent.fsgn5-1.fna&_nc_gid=k4bR6_6DHJ8We3iBirMwHg&_nc_ss=7b2a8&oh=00_Af1X8kia0fLrwFEuqqoPIyWoCtpN9hWK9uWkfgTYkKcDSA&oe=69F45BEF",
+  "https://scontent.fsgn5-7.fna.fbcdn.net/v/t39.30808-6/684116443_122193062078766968_7334853140283229011_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeGVaxsvAMH2XpUqX6cwd4POrFiURhEEMwysWJRGEQQzDLEwk31Bt8_cwv2H6_EFATsT8heEWeQS3lpap2R8j8U4&_nc_ohc=6VZNr8WY3ygQ7kNvwFaAvmG&_nc_oc=AdqIflNIrHoUFP9qmaP22RH4Cd_ik5bDw3769mgxTW7s_K2_sE4C1WFWXMoyb4uis5n2fXRXXg5vFRLHY7dWdwiE&_nc_zt=23&_nc_ht=scontent.fsgn5-7.fna&_nc_gid=41ypynkFNWJnKVvwy8wzdw&_nc_ss=7b2a8&oh=00_Af1V8EqNITJA94saocSm4RoqZyQhPj1cikHsDodIZQ9gSw&oe=69F458E1"
+];
+let currentAboutImgIndex = 0;
+function changeAboutImage() {
+  const imgElement = document.getElementById('aboutImage');
+  if (!imgElement) return;
+  currentAboutImgIndex = (currentAboutImgIndex + 1) % aboutImages.length;
+  imgElement.style.opacity = 0;
+  setTimeout(() => { imgElement.src = aboutImages[currentAboutImgIndex]; imgElement.style.opacity = 1; }, 200); 
+}
+
+function openDetailModal(id, type) {
+  const data = type === 'project' ? projects.find(p => p.id === id) : experiences.find(e => e.id === id);
+  if (!data) return;
+
+  document.getElementById('modalEmoji').style.background = data.gradient;
+  document.getElementById('modalEmoji').textContent = data.emoji;
+  document.getElementById('modalCategory').textContent = type === 'project' ? data.cat.toUpperCase() : data.year;
+  document.getElementById('modalTitle').textContent = data.title;
+  document.getElementById('modalDescription').textContent = data.fullDescription;
+  document.getElementById('modalSectionHeadline').textContent = type === 'project' ? 'Mục tiêu & Kết quả' : 'Thành tựu & Vai trò';
+  document.getElementById('modalToolsHeadline').textContent = type === 'project' ? 'Công cụ & Kỹ thuật' : 'Kỹ năng ứng dụng';
+  document.getElementById('modalObjective').textContent = data.objective;
+
+  const toolsContainer = document.getElementById('modalTools');
+  toolsContainer.innerHTML = '';
+  data.tools.forEach(tool => {
+    const tag = document.createElement('div'); tag.className = 'feature-tag'; tag.textContent = tool; toolsContainer.appendChild(tag);
+  });
+
+  const gallerySection = document.getElementById('modalGallerySection');
+  if (type === 'project' && data.gallery) {
+    gallerySection.style.display = 'block';
+    const galleryContainer = document.getElementById('modalGallery'); galleryContainer.innerHTML = '';
+    data.gallery.forEach(item => {
+      const galleryItem = document.createElement('a');
+      galleryItem.href = item.link; galleryItem.target = '_blank'; galleryItem.className = 'gallery-item';
+      galleryItem.innerHTML = `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 50px; background: rgba(168, 85, 247, 0.05);">${item.image}</div>
+        <div class="gallery-item-overlay"><div class="gallery-item-name">${item.name}</div><div class="gallery-item-action"><i data-lucide="external-link" style="width:14px;height:14px"></i> Xem chi tiết</div></div>`;
+      galleryContainer.appendChild(galleryItem);
+    });
+  } else { gallerySection.style.display = 'none'; }
+
+  const linksContainer = document.getElementById('modalLinks');
+  linksContainer.innerHTML = '';
+  if(data.links) {
+    data.links.forEach(link => {
+      const btn = document.createElement('a'); btn.href = link.url;
+      if (link.url.startsWith('http') && !link.url.startsWith('mailto:')) btn.target = '_blank';
+      btn.className = `modal-link-btn ${link.type || ''}`;
+      btn.innerHTML = `<i data-lucide="${link.icon}" style="width:18px;height:18px"></i> ${link.label}`;
+      linksContainer.appendChild(btn);
+    });
+  }
+
+  document.getElementById('projectModal').classList.add('active');
+  lucide.createIcons();
+}
+
+function closeProjectModal() { document.getElementById('projectModal').classList.remove('active'); }
+document.getElementById('projectModal').addEventListener('click', (e) => { if (e.target.id === 'projectModal') closeProjectModal(); });
+document.getElementById('modalClose').addEventListener('click', closeProjectModal);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeProjectModal(); });
+
+const projectGrid = document.getElementById('projectGrid');
+function renderProjects(filter) {
+  const filtered = filter === 'all' ? projects : projects.filter(p => p.cat === filter);
+  if(!projectGrid) return;
+  projectGrid.innerHTML = '';
+  filtered.forEach((p, i) => {
+    const card = document.createElement('button');
+    card.className = 'project-card glass overflow-hidden neon-card card-shine text-left'; card.style.animationDelay = `${i * 0.12}s`;
+    card.innerHTML = `
+      <div style="height:200px;background:${p.gradient};display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;box-shadow:inset 0 -20px 40px rgba(0,0,0,0.2);">
+        <span class="transform transition-transform duration-500 hover:scale-125">${p.emoji}</span>
+        <div class="card-overlay" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <span style="color:#fff;font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px;font-family:'Poppins',sans-serif; background: rgba(255,255,255,0.2); padding: 10px 24px; border-radius: 99px; backdrop-filter: blur(8px);"><i data-lucide="arrow-up-right" style="width:18px;height:18px"></i> Xem chi tiết</span>
+        </div>
+      </div>
+      <div class="p-6" style="background:rgba(10,10,26,0.6);">
+        <span class="text-[12px] px-3 py-1 rounded-full uppercase tracking-wider font-bold mb-3 inline-block" style="background:rgba(168,85,247,0.15);color:#c084fc;">${p.cat}</span>
+        <h4 class="text-[18px] font-bold mb-2 text-white" style="font-family:'Montserrat',sans-serif">${p.title}</h4>
+        <p class="text-[14px] text-gray-400" style="font-family:'Poppins',sans-serif">${p.desc}</p>
       </div>`;
-    card.addEventListener('mouseenter', () => {
-      card.querySelector('.card-overlay').style.opacity = '1';
-      card.querySelector('div:last-child').style.background = 'rgba(168,85,247,0.1)';
-    });
-    card.addEventListener('mouseleave', () => {
-      card.querySelector('.card-overlay').style.opacity = '0';
-      card.querySelector('div:last-child').style.background = 'rgba(10,10,26,0.5)';
-    });
-    card.addEventListener('click', (e) => {
-      // Bounce effect
-      card.style.animation = 'card-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
-      setTimeout(() => card.style.animation = '', 500);
-      
-      // Pulse ripple
-      const pulse = document.createElement('div');
-      pulse.style.position = 'absolute';
-      pulse.style.width = '100%';
-      pulse.style.height = '100%';
-      pulse.style.background = 'rgba(255,255,255,0.2)';
-      pulse.style.borderRadius = '20px';
-      pulse.style.animation = 'pulse-click 0.6s ease-out';
-      card.style.position = 'relative';
-      card.appendChild(pulse);
-      setTimeout(() => pulse.remove(), 600);
-    });
+    card.addEventListener('click', () => openDetailModal(p.id, 'project'));
     projectGrid.appendChild(card);
   });
   lucide.createIcons();
 }
 renderProjects('all');
 
-// Filter buttons
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
     renderProjects(btn.dataset.filter);
   });
 });
 
-// ===== RENDER SKILLS =====
-function renderSkillBars(containerId, skills) {
+function renderSkillBars(containerId, skills, colorScheme) {
   const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = '';
+  const gradient = colorScheme === 'blue' ? 'linear-gradient(90deg, #3b82f6, #6366f1, #8b5cf6)' : 'linear-gradient(90deg, #a855f7, #ec4899, #7c3aed)';
+  const glowColor = colorScheme === 'blue' ? 'rgba(99,102,241,0.6)' : 'rgba(236,72,153,0.6)';
+
   skills.forEach((s, idx) => {
-    const div = document.createElement('div');
-    div.innerHTML = `<div class="text-sm mb-2"><span class="font-500" style="font-weight:500">${s.name}</span></div><div class="skill-bar-enhanced"><div class="fill" style="width:${s.pct}%;transition:width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${idx * 0.15}s;"></div></div>`;
+    const div = document.createElement('div'); div.className = "mb-7";
+    div.innerHTML = `
+      <div class="flex justify-between items-center mb-3" style="font-family:'Poppins',sans-serif">
+        <span class="text-[15px] font-semibold text-gray-200 tracking-wide">${s.name}</span>
+        <span class="text-[14px] font-bold opacity-0">${s.pct}%</span>
+      </div>
+      <div class="h-2.5 w-full bg-white/5 rounded-full overflow-visible relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)]">
+        <div class="absolute top-0 left-0 h-full rounded-full" style="width:0%; background:${gradient}; box-shadow: 0 0 15px ${glowColor}; transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${idx * 0.15}s;" data-width="${s.pct}%">
+          <div class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 w-4 h-4 bg-white rounded-full shadow-[0_0_15px_#fff]"></div>
+        </div>
+      </div>
+    `;
     container.appendChild(div);
+    setTimeout(() => { const bar = div.querySelector('[data-width]'); if (bar) bar.style.width = bar.getAttribute('data-width'); }, 150);
   });
 }
-renderSkillBars('designSkills', designSkills);
-renderSkillBars('softSkills', softSkills);
+renderSkillBars('designSkills', designSkills, 'purple');
+renderSkillBars('softSkills', softSkills, 'blue');
 
-// ===== RENDER TIMELINE =====
-const timeline = document.getElementById('timeline');
-experiences.forEach((exp, idx) => {
-  const item = document.createElement('div');
-  item.className = 'timeline-item exp-card relative mb-10 pl-6';
-  item.style.animationDelay = `${idx * 0.15}s`;
-  item.innerHTML = `<div class="timeline-dot"></div><div class="glass p-5"><span class="text-xs font-600 px-3 py-1 rounded-full" style="background:rgba(168,85,247,0.15);color:#a855f7;font-weight:600">${exp.year}</span><h4 class="text-base font-600 mt-3" style="font-weight:600;transition:color 0.3s ease">${exp.title}</h4><p class="text-sm" style="color:#a855f7;transition:color 0.3s ease">${exp.org}</p><p class="text-sm mt-2" style="color:rgba(255,255,255,0.4);transition:color 0.3s ease">${exp.desc}</p></div>`;
-  timeline.appendChild(item);
-});
+const experienceHorizontal = document.getElementById('experienceHorizontal');
+if (experienceHorizontal) {
+  experienceHorizontal.innerHTML = '';
+  experiences.forEach((exp, idx) => {
+    const item = document.createElement('div');
+    item.className = 'glass p-8 rounded-[32px] relative overflow-hidden group hover:-translate-y-3 transition-all duration-500 border border-white/5 hover:border-purple-500/40 hover:shadow-[0_20px_50px_rgba(168,85,247,0.2)] bg-gradient-to-b from-white/[0.03] to-transparent cursor-pointer w-full md:w-[calc(50%-16px)] lg:w-[calc(25%-24px)] flex-shrink-0 flex flex-col';
+    item.style.opacity = '0'; item.style.animation = `float-in 0.8s ease-out ${idx * 0.15}s forwards`;
+    item.onclick = () => openDetailModal(exp.id, 'experience');
 
-// ===== SCROLL REVEAL =====
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-}, { threshold: 0.1 });
+    item.innerHTML = `
+      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      <div class="flex flex-col items-start mb-5 relative z-10">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-[28px] mb-4 shadow-[0_0_20px_rgba(168,85,247,0.2)] group-hover:scale-110 transition-transform duration-500 bg-white/5 border border-white/10 group-hover:border-purple-500/50">
+          ${exp.emoji || '⭐'}
+        </div>
+        <span class="text-[13px] font-bold px-4 py-1.5 rounded-full" style="background:rgba(168,85,247,0.15); color:#c084fc; font-family:'Montserrat',sans-serif;">${exp.year}</span>
+      </div>
+      <div class="flex-grow">
+        <h4 class="text-[18px] font-bold mb-2 text-white leading-snug group-hover:text-purple-300 transition-colors" style="font-family:'Montserrat',sans-serif;">${exp.title}</h4>
+        <p class="text-[13px] font-medium mb-3 text-gray-400 flex items-center gap-2" style="font-family:'Poppins',sans-serif"><i data-lucide="building-2" class="w-3.5 h-3.5 text-purple-400"></i>${exp.org}</p>
+        <p class="text-[14px] leading-relaxed text-gray-400 line-clamp-3" style="font-family:'Poppins',sans-serif">${exp.desc}</p>
+      </div>
+      <div class="mt-6 pt-4 border-t border-white/10 text-[12px] uppercase tracking-widest font-bold text-pink-400 flex items-center gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+         Chi tiết <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+      </div>
+    `;
+    experienceHorizontal.appendChild(item);
+  });
+}
+
+const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } }); }, { threshold: 0.1 });
 document.querySelectorAll('.reveal-section').forEach(s => observer.observe(s));
 
-// Skill bar animation
-const skillObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.querySelectorAll('.skill-fill').forEach(bar => { bar.style.width = bar.dataset.width; });
-    }
-  });
-}, { threshold: 0.3 });
-document.querySelectorAll('#designSkills, #softSkills').forEach(s => skillObserver.observe(s));
+document.getElementById('mobileMenuBtn').addEventListener('click', () => { document.getElementById('mobileMenu').classList.toggle('hidden'); });
+document.querySelectorAll('#mobileMenu a').forEach(a => { a.addEventListener('click', () => document.getElementById('mobileMenu').classList.add('hidden')); });
 
-// ===== MOBILE MENU =====
-document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-  document.getElementById('mobileMenu').classList.toggle('hidden');
-});
-document.querySelectorAll('#mobileMenu a').forEach(a => {
-  a.addEventListener('click', () => document.getElementById('mobileMenu').classList.add('hidden'));
-});
-
-// ===== CONTACT FORM =====
 document.getElementById('contactForm').addEventListener('submit', (e) => {
   e.preventDefault();
-  
-  // Particle burst effect
-  const rect = e.target.querySelector('button').getBoundingClientRect();
-  for (let i = 0; i < 8; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'particle-burst';
-    const angle = (i / 8) * Math.PI * 2;
-    particle.style.setProperty('--tx', Math.cos(angle) * 100 + 'px');
-    particle.style.setProperty('--ty', Math.sin(angle) * 100 + 'px');
-    particle.style.left = rect.left + rect.width / 2 + 'px';
-    particle.style.top = rect.top + rect.height / 2 + 'px';
-    particle.style.width = '8px';
-    particle.style.height = '8px';
-    particle.style.background = i % 2 ? '#a855f7' : '#3b82f6';
-    particle.style.borderRadius = '50%';
-    document.body.appendChild(particle);
-    setTimeout(() => particle.remove(), 800);
-  }
-  
-  document.getElementById('formSuccess').classList.remove('hidden');
-  e.target.reset();
-  setTimeout(() => document.getElementById('formSuccess').classList.add('hidden'), 3000);
+  confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: ['#a855f7', '#ec4899', '#7c3aed'] });
+  document.getElementById('formSuccess').classList.remove('hidden'); e.target.reset();
+  setTimeout(() => document.getElementById('formSuccess').classList.add('hidden'), 4000);
 });
 
-// ===== ELEMENT SDK =====
 const defaultConfig = {
   hero_name: 'Nguyễn Trần Hoàng Phúc',
   hero_subtitle: 'PR Student · Designer · Content Creator',
@@ -1350,84 +1349,39 @@ const defaultConfig = {
   about_text: 'Mình là Hoàng Phúc — sinh viên ngành Quan hệ Công chúng với niềm đam mê thiết kế và sáng tạo nội dung.',
   contact_email: 'nguyentranhoangphuc.zica@gmail.com',
   contact_phone: '0967 195 053',
-  background_color: '#0a0a1a',
-  surface_color: 'rgba(255,255,255,0.05)',
-  text_color: '#e8e4f0',
+  background_color: '#0a0f1f',
   primary_color: '#a855f7',
-  secondary_color: '#6366f1',
-  font_family: 'Outfit',
-  font_size: 16,
+  secondary_color: '#7c3aed',
+  font_family: 'Poppins',
 };
 
 function applyConfig(config) {
   const c = key => config[key] || defaultConfig[key];
-  // Text
   const heroName = document.getElementById('heroName');
   const name = c('hero_name');
   const parts = name.split(' ');
-  if (parts.length > 2) {
-    heroName.innerHTML = parts.slice(0, -2).join(' ') + '<br>' + parts.slice(-2).join(' ');
-  } else {
-    heroName.textContent = name;
-  }
-  document.getElementById('heroSubtitle').textContent = c('hero_subtitle');
-  document.getElementById('heroDesc').textContent = c('hero_description');
-  document.getElementById('aboutText').textContent = c('about_text');
-  document.getElementById('contactEmail').textContent = c('contact_email');
-  document.getElementById('contactPhone').textContent = c('contact_phone');
+  if (parts.length > 2 && heroName) { heroName.innerHTML = '<br>' + parts.slice(0, -2).join(' ') + '<br>' + parts.slice(-2).join(' '); } 
+  else if (heroName) { heroName.textContent = name; }
+  
+  if(document.getElementById('heroSubtitle')) document.getElementById('heroSubtitle').textContent = c('hero_subtitle');
+  if(document.getElementById('heroDesc')) document.getElementById('heroDesc').textContent = c('hero_description');
+  if(document.getElementById('aboutText')) document.getElementById('aboutText').textContent = c('about_text');
+  if(document.getElementById('contactEmail')) document.getElementById('contactEmail').querySelector('a').textContent = c('contact_email');
+  if(document.getElementById('contactPhone')) document.getElementById('contactPhone').querySelector('a').textContent = c('contact_phone');
 
-  // Font
   const font = c('font_family');
-  const baseSize = c('font_size');
-  document.body.style.fontFamily = `${font}, Outfit, Time newroman`;
-  heroName.style.fontSize = `${baseSize * 3}px`;
-  document.getElementById('heroSubtitle').style.fontSize = `${baseSize * 1.25}px`;
-  document.getElementById('heroDesc').style.fontSize = `${baseSize}px`;
-
-  // Colors
+  document.body.style.fontFamily = `${font}, Poppins, Outfit`;
+  
+  document.body.style.backgroundColor = c('background_color');
+  document.querySelector('.app-wrapper').style.background = 'transparent';
+  
   document.documentElement.style.setProperty('--bg', c('background_color'));
   document.documentElement.style.setProperty('--primary', c('primary_color'));
   document.documentElement.style.setProperty('--secondary', c('secondary_color'));
-  document.documentElement.style.setProperty('--text', c('text_color'));
-  document.querySelector('.app-wrapper').style.background = c('background_color');
-  document.querySelector('.app-wrapper').style.color = c('text_color');
 }
 
-// Add bounce effect to all buttons
-document.addEventListener('click', (e) => {
-  if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-    const btn = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
-    btn.classList.add('btn-bounce');
-    setTimeout(() => btn.classList.remove('btn-bounce'), 500);
-  }
-});
-
-window.elementSdk.init({
-  defaultConfig,
-  onConfigChange: async (config) => applyConfig(config),
-  mapToCapabilities: (config) => ({
-    recolorables: [
-      { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
-      { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
-      { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
-      { get: () => config.primary_color || defaultConfig.primary_color, set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
-      { get: () => config.secondary_color || defaultConfig.secondary_color, set: (v) => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } },
-    ],
-    borderables: [],
-    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
-    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } },
-  }),
-  mapToEditPanelValues: (config) => new Map([
-    ['hero_name', config.hero_name || defaultConfig.hero_name],
-    ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
-    ['hero_description', config.hero_description || defaultConfig.hero_description],
-    ['about_text', config.about_text || defaultConfig.about_text],
-    ['contact_email', config.contact_email || defaultConfig.contact_email],
-    ['contact_phone', config.contact_phone || defaultConfig.contact_phone],
-  ]),
-});
-
+window.elementSdk.init({ defaultConfig, onConfigChange: async (config) => applyConfig(config) });
 lucide.createIcons();
-</script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ed52f9e35168325',t:'MTc3NjM2MzQzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  </script>
+ </body>
 </html>
